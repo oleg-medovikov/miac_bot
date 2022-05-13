@@ -30,6 +30,7 @@ class IsKnown(BoundFilter):
                 first_name = message['from']['first_name'],
                 last_name = message['from']['last_name'],
                 username = message['from']['username'],
+                groups = '', fio ='', description = '',
                 )
         if not await USER.check():
             await USER.add_people() 
@@ -50,6 +51,7 @@ class IsAdmin(BoundFilter):
                 first_name = message['from']['first_name'],
                 last_name = message['from']['last_name'],
                 username = message['from']['username'],
+                groups = '', fio ='', description = '',
                 )
         return await USER.admin()
 

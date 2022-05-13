@@ -12,4 +12,5 @@ t_users = Table(
     Column('username', String), # username юзера в телеге
     Column('groups', String), # username юзера в телеге
     Column('fio', String), # username юзера в телеге
+    Column('description', String), # Описание кто это такой
     )

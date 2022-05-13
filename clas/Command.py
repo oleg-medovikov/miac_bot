@@ -31,7 +31,6 @@ class Command(BaseModel):
 
     async def read():
         "Чтение всех комманд"
-        
         query = t_commands.select().order_by(t_commands.c.c_id)
         
         return await POSTGRESS_DB.fetch_all(query)

@@ -7,19 +7,17 @@ from base import POSTGRESS_EN
 import pandas as pd
 import os
 
-@dp.message_handler(is_admin=True, commands=['commands'])
-async def get_commands(message: types.Message):
-    df = pd.read_sql("select * from commands order by c_id", POSTGRESS_EN )
+@dp.message_handler(is_admin=True, commands=['users'])
+async def get_users(message: types.Message):
+    df = pd.read_sql("select * from users order by u_id", POSTGRESS_EN )
 
-    FILENAME = 'temp/Commands.xlsx'
-    SHETNAME = 'commands'
+    FILENAME = 'temp/Users.xlsx'
+    SHETNAME = 'Users'
 
     write_styling_excel_file(FILENAME,df, SHETNAME)
 
     await message.delete()
     await message.answer_document(open(FILENAME, 'rb' ))
     os.remove(FILENAME)
-
-
 
 
