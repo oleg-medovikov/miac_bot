@@ -34,6 +34,7 @@ class IsKnown(BoundFilter):
                 )
         if not await USER.check():
             await USER.add_people() 
+            await message.delete()
             await message.answer('Только для известных пользователей')
             return False
         else:
@@ -53,7 +54,11 @@ class IsAdmin(BoundFilter):
                 username = message['from']['username'],
                 groups = '', fio ='', description = '',
                 )
-        return await USER.admin()
+        if not await USER.admin():
+            await message.delete()
+            return False
+        else:
+            return True
 
 dp.filters_factory.bind(IsKnown)
 dp.filters_factory.bind(IsAdmin)

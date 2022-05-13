@@ -34,9 +34,9 @@ class User(BaseModel):
 
         if res is None:
             MAN = self.__dict__
-            MAN.drop('groups')
-            MAN.drop('fio')
-            MAN.drop('description')
+            MAN.pop('groups')
+            MAN.pop('fio')
+            MAN.pop('description')
             query = t_people.insert().values(MAN)
             await POSTGRESS_DB.execute(query)
     

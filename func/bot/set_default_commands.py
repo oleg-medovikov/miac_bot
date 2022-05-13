@@ -8,6 +8,8 @@ async def set_default_commands(dp):
             description="Получить файл с пользователями"),
          BotCommand(command="commands",
             description="Получить файл с командами"),
-         ]
+         BotCommand(command="dirs",
+            description="Получить файл с директориями"),
+          ]
 
     await dp.bot.set_my_commands(commands)
