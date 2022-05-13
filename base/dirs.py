@@ -9,5 +9,4 @@ t_dirs = Table(
     Column('d_name', String), # имя директории
     Column('directory', String), # сама директория
     Column('working', Boolean), # Рабочая ли она
-    
     ) 

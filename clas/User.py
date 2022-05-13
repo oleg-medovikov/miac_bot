@@ -1,6 +1,6 @@
 from datetime import date
 from uuid import uuid4, UUID
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 from base import POSTGRESS_DB, t_users, t_people
 
@@ -43,3 +43,16 @@ class User(BaseModel):
         else:
             return False
 
+    async def admin(self) -> bool:
+        "Проверка на администратора"
+        query = t_users.select(t_users.c.u_id == self.u_id)
+
+        res = await POSTGRESS_DB.fetch_one(query)
+
+        if res is None:
+            return False
+
+        if res['groups'] == 'admin':
+            return True
+        else:
+            return False

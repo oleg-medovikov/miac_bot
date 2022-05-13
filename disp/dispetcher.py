@@ -38,5 +38,21 @@ class IsKnown(BoundFilter):
         else:
             return True
 
+class IsAdmin(BoundFilter):
+    key = 'is_admin'
+
+    def __init__(self, is_admin):
+        self.is_admin = is_admin
+
+    async def check(self, message: types.Message):
+        USER = User(
+                u_id = message['from']['id'],
+                first_name = message['from']['first_name'],
+                last_name = message['from']['last_name'],
+                username = message['from']['username'],
+                )
+        return await USER.admin()
+
 dp.filters_factory.bind(IsKnown)
+dp.filters_factory.bind(IsAdmin)
 
