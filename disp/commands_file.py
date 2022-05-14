@@ -1,14 +1,39 @@
 from .dispetcher import dp, bot
 from aiogram import types
 import pandas as pd, os
-from clas import Command
+from clas import User, Command
 
-@dp.message_handler(is_admin=True, content_types=['document'])
+from aiogram.dispatcher.filters import BoundFilter
+
+class IsCommandsFile(BoundFilter):
+    key = 'is_commands_file'
+
+    def __init__(self, is_commands_file):
+        self.is_commands_file = is_commands_file
+
+    async def check(self, message: types.Message):
+
+        USER = User(
+                u_id = message['from']['id'],
+                first_name = message['from']['first_name'],
+                last_name = message['from']['last_name'],
+                username = message['from']['username'],
+                groups = '', fio ='', description = '',
+                )
+        if not message['document']['file_name'] == 'Commands.xlsx':
+            return False
+        if not await USER.admin():
+            await message.delete()
+            return False
+        return True
+
+
+dp.filters_factory.bind(IsCommandsFile)
+
+
+@dp.message_handler(is_commands_file=True, content_types=['document'])
 async def update_commands(message):
     FILE = message['document']
-    if not FILE.file_name == 'Commands.xlsx':
-        return None
-    
 
     DESTINATION = 'temp/' + FILE.file_unique_id + '.xlsx'
     await bot.download_file_by_id(

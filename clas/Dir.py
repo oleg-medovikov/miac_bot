@@ -22,7 +22,7 @@ class Dir(BaseModel):
 
     async def add(self):
         "Добавляем новую директорию"
-        query = t_dirs.select(t_dirs.c.d_name == self.d_id)
+        query = t_dirs.select(t_dirs.c.d_id == self.d_id)
         res = await POSTGRESS_DB.fetch_one(query)
 
         if not res is None:

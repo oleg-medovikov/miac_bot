@@ -1,15 +1,40 @@
 from .dispetcher import dp, bot
 from aiogram import types
 import pandas as pd, os
-from clas import Dir
+from clas import User, Dir
 
-@dp.message_handler(is_admin=True, content_types=['document'])
+from aiogram.dispatcher.filters import BoundFilter
+
+class IsDirsFile(BoundFilter):
+    key = 'is_dirs_file'
+
+    def __init__(self, is_dirs_file):
+        self.is_dirs_file = is_dirs_file
+
+    async def check(self, message: types.Message):
+
+        USER = User(
+                u_id = message['from']['id'],
+                first_name = message['from']['first_name'],
+                last_name = message['from']['last_name'],
+                username = message['from']['username'],
+                groups = '', fio ='', description = '',
+                )
+        if not message['document']['file_name'] == 'Dirs.xlsx':
+            return False
+        if not await USER.admin():
+            await message.delete()
+            return False
+        return True
+
+
+dp.filters_factory.bind(IsDirsFile)
+
+
+@dp.message_handler(is_dirs_file=True, content_types=['document'])
 async def update_dirs(message):
-    print(1)
     FILE = message['document']
-    if not FILE.file_name == 'Dirs.xlsx':
-        return None
-    
+     
     DESTINATION = 'temp/' + FILE.file_unique_id + '.xlsx'
     await bot.download_file_by_id(
                 file_id = FILE.file_id,
@@ -33,7 +58,6 @@ async def update_dirs(message):
         os.remove(DESTINATION)
         return await message.answer(str(e))
     
-   
     ## Проверки файла на всякое
     # на наличие пустых ячеек
     if any(df.loc[df.isnull().to_numpy(),'d_id'] ):

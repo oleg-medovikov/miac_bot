@@ -3,11 +3,37 @@ from aiogram import types
 import pandas as pd, os
 from clas import User
 
-@dp.message_handler(is_admin=True, content_types=['document'])
+
+from aiogram.dispatcher.filters import BoundFilter
+
+class IsUsersFile(BoundFilter):
+    key = 'is_users_file'
+
+    def __init__(self, is_users_file):
+        self.is_users_file = is_users_file
+
+    async def check(self, message: types.Message):
+
+        USER = User(
+                u_id = message['from']['id'],
+                first_name = message['from']['first_name'],
+                last_name = message['from']['last_name'],
+                username = message['from']['username'],
+                groups = '', fio ='', description = '',
+                )
+        if not message['document']['file_name'] == 'Users.xlsx':
+            return False
+        if not await USER.admin():
+            await message.delete()
+            return False
+        return True
+
+
+dp.filters_factory.bind(IsUsersFile)
+
+@dp.message_handler(is_users_file=True, content_types=['document'])
 async def update_users(message):
     FILE = message['document']
-    if not FILE.file_name == 'Users.xlsx':
-        return None
     
     DESTINATION = 'temp/' + FILE.file_unique_id + '.xlsx'
     await bot.download_file_by_id(
