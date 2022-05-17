@@ -8,5 +8,8 @@ from clas import User
 async def send_welcome(message: types.Message):
     USER = await User.get_by_id( message['from']['id'] )
 
-    await message.delete()
+    try:
+        await message.delete()
+    except:
+        pass
     await message.answer(hello_message(USER), parse_mode='html')

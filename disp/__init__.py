@@ -1,4 +1,6 @@
-from .dispetcher    import  dp, on_startup
+from .dispetcher    import  dp,bot 
+from .on_startup import on_startup
+
 from .start         import *
 from .users_get     import *
 from .users_file    import *

@@ -2,9 +2,8 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.dispatcher.filters import BoundFilter
 import logging
 
+
 from conf import TELEGRAM_API
-from base import POSTGRESS_DB
-from func import set_default_commands
 from clas import User 
 
 logging.basicConfig(level=logging.INFO)
@@ -12,10 +11,6 @@ logging.basicConfig(level=logging.INFO)
 bot = Bot(token=TELEGRAM_API)
 dp  = Dispatcher(bot)
 
-
-async def on_startup(dp):
-    await POSTGRESS_DB.connect()
-    await set_default_commands(dp)
 
 
 class IsKnown(BoundFilter):
@@ -34,7 +29,10 @@ class IsKnown(BoundFilter):
                 )
         if not await USER.check():
             await USER.add_people() 
-            await message.delete()
+            try:
+                await message.delete()
+            except:
+                pass
             await message.answer('Только для известных пользователей')
             return False
         else:
