@@ -8,4 +8,6 @@ from .commands_file import *
 from .commands_get  import *
 from .dirs_get      import *
 from .dirs_file     import *
+from .access_get    import *
+from .access_file   import *
 
