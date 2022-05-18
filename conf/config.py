@@ -7,3 +7,5 @@ DATABASE_POSTGRESS = config('DATABASE_POSTGRESS', cast=str)
 TELEGRAM_API = config('TELEGRAM_API', cast=str)
 
 CHAT_SVALKA_ID = config('chat_svalka_id', cast=int)
+
+DATABASE_PARUS = config('DATABASE_PARUS', cast=str)

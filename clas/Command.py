@@ -5,6 +5,7 @@ from pydantic import BaseModel, Field
 
 
 from base import POSTGRESS_DB, t_commands
+from func import *
 
 class Command(BaseModel):
     c_id : int
@@ -34,3 +35,7 @@ class Command(BaseModel):
         query = t_commands.select().order_by(t_commands.c.c_id)
         
         return await POSTGRESS_DB.fetch_all(query)
+
+    async def start(self,U_ID):
+        pass
+        

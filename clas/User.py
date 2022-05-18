@@ -2,7 +2,7 @@ from datetime import date
 from uuid import uuid4, UUID
 from pydantic import BaseModel
 
-from base import POSTGRESS_DB, t_users, t_people
+from base import POSTGRESS_DB, t_users, t_people, t_access
 
 class User(BaseModel):
     u_id        : int
@@ -74,3 +74,12 @@ class User(BaseModel):
             return True
         else:
             return False
+
+    async def access(self):
+        "Возвращает список доступных комманд"
+        sql = f"""
+        select a.c_id,c.c_name from access as a
+            join commands as c on (a.c_id = c.c_id) 
+                where a.u_id = {self.u_id}
+        """
+        return await POSTGRESS_DB.fetch_all(sql)

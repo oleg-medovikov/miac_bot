@@ -1,7 +1,6 @@
 from .postgress import metadata
 
-from sqlalchemy import Table, Column, Integer, String, Boolean
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import Table, Column, Integer, String 
 
 t_access = Table(
     "access",

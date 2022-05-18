@@ -1,0 +1,44 @@
+from pydantic import BaseModel, Field
+from datetime import datetime
+from uuid import uuid4, UUID
+from sqlalchemy import and_
+
+from base import POSTGRESS_DB, t_tasks
+
+class Task(BaseModel):
+    t_id        : UUID = Field(default_factory=uuid4)
+    time_create : datetime
+    client      : int
+    task_type   : str
+    c_id        : int
+    c_func      : str
+    c_arg       : str
+    users_list  : str
+    time_start  : datetime
+    time_stop   : datetime
+    comment     : str
+
+
+    async def add(self):
+        """Создание нового задания
+            Нужно проверить, есть ли в пуле 
+            выполняющиеся такое задание"""
+
+        query = t_tasks.select(and_(
+            t_tasks.c.time_stop == None,
+            t_tasks.c.c_id == self.c_id
+            ))
+        res = await POSTGRESS_DB.fetch_one(query)
+
+        if not res is None:
+            query = t_tasks.update()\
+                    .where(t_tasks.c.t_id == res['t_id'])\
+                    .values(users_list = users_list + ',' + str(self.client))
+            await POSTGRESS_DB.execute(query)
+        else:
+            query = t_tasks.insert().values(self.__dict__)
+
+            await POSTGRESS_DB.execute(query)
+
+
+
