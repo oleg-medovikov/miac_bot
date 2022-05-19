@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field
+from typing import Optional
 from datetime import datetime
 from uuid import uuid4, UUID
 from sqlalchemy import and_
@@ -14,9 +15,9 @@ class Task(BaseModel):
     c_func      : str
     c_arg       : str
     users_list  : str
-    time_start  : datetime
-    time_stop   : datetime
-    comment     : str
+    time_start  : Optional[datetime]
+    time_stop   : Optional[datetime]
+    comment     : Optional[str]
 
 
     async def add(self):
@@ -31,10 +32,11 @@ class Task(BaseModel):
         res = await POSTGRESS_DB.fetch_one(query)
 
         if not res is None:
-            query = t_tasks.update()\
-                    .where(t_tasks.c.t_id == res['t_id'])\
-                    .values(users_list = users_list + ',' + str(self.client))
-            await POSTGRESS_DB.execute(query)
+            if str(self.client) not in res['users_list']: 
+                query = t_tasks.update()\
+                        .where(t_tasks.c.t_id == res['t_id'])\
+                        .values(users_list = res['users_list'] + ',' + str(self.client))
+                await POSTGRESS_DB.execute(query)
         else:
             query = t_tasks.insert().values(self.__dict__)
 

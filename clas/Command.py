@@ -35,7 +35,11 @@ class Command(BaseModel):
         query = t_commands.select().order_by(t_commands.c.c_id)
         
         return await POSTGRESS_DB.fetch_all(query)
-
-    async def start(self,U_ID):
-        pass
+    
+    async def get(C_ID):
+        "Получение команды по айдишнику"
+        query = t_commands.select(t_commands.c.c_id == int(C_ID))
+        res = await POSTGRESS_DB.fetch_one(query)
+         
+        return Command(**res)
         
