@@ -2,7 +2,7 @@ from .dispetcher import dp
 from aiogram import types
 from aiogram.dispatcher.filters import Text
 from aiogram.utils.callback_data import CallbackData
-import uuid, datetime
+import uuid, datetime, time
 
 from func import hello_message
 from clas import User, Command, Task
@@ -53,6 +53,7 @@ async def some_callback_handler(query: types.CallbackQuery, callback_data: dict)
             comment = None
             )
     await TASK.add()
+    await query.answer('Задача добавлена, ожидайте результата', show_alert=False)
+    time.sleep(2)
     await query.message.delete()
-    await query.answer()
 

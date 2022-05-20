@@ -42,5 +42,41 @@ class Task(BaseModel):
 
             await POSTGRESS_DB.execute(query)
 
+    async def get():
+        """Взять доступную задачу"""
+        query = t_tasks.select(t_tasks.c.time_start == None)
 
+        res = await POSTGRESS_DB.fetch_one(query)
+        
+        if not res is None:
+            query = t_tasks.update()\
+                    .where(t_tasks.c.t_id == res['t_id'])\
+                    .values(time_start = datetime.now())
+            await POSTGRESS_DB.execute(query)
+            return Task(**res)
 
+    async def restart():
+        """Рестартануть выполнение задач, если бот перезапустился"""
+        query = t_tasks.update()\
+                .where(t_tasks.c.time_stop == None)\
+                .values(time_start = None )
+        
+        await POSTGRESS_DB.execute(query)
+
+    async def stop(self):
+        """Закончить задачу"""
+        query =  t_tasks.update()\
+                .where(t_tasks.c.t_id == self.t_id)\
+                .values(time_stop = datetime.now(),
+                        comment = self.comment)
+        await POSTGRESS_DB.execute(query)
+
+    async def users(self):
+        """Получить список юзеров для рассылки"""
+        query = t_tasks.select(t_tasks.c.t_id == self.t_id)
+
+        res = await POSTGRESS_DB.fetch_one(query)
+        
+        if not res is None:
+            list_ = [ int(x) for x in res["users_list"].split(',') ]
+            return list_

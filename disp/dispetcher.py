@@ -7,6 +7,8 @@ from conf import TELEGRAM_API
 from clas import User 
 
 logging.basicConfig(level=logging.INFO)
+logging.getLogger('schedule').propagate = False
+logging.getLogger('schedule').addHandler(logging.NullHandler())
 
 bot = Bot(token=TELEGRAM_API)
 dp  = Dispatcher(bot)
