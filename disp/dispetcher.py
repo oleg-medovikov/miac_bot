@@ -13,8 +13,6 @@ logging.getLogger('schedule').addHandler(logging.NullHandler())
 bot = Bot(token=TELEGRAM_API)
 dp  = Dispatcher(bot)
 
-
-
 class IsKnown(BoundFilter):
     key = 'is_know'
     

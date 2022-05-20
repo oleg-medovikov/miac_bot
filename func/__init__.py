@@ -6,4 +6,5 @@ from .admin.check_robot            import check_robot
 
 ## Парус!
 
-from .parus.svod_29_covid_19       import svod_29_covid_19
+from .parus.svod_29_covid_19    import svod_29_covid_19
+from .parus.svod_40_covid_19    import svod_40_covid_19
