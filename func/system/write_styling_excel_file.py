@@ -26,8 +26,8 @@ def write_styling_excel_file(path,df,sheet_name):
                 ),
             style_header=False
             )
-    StyleFrame.A_FACTOR = len(df.columns)*1.5
-    StyleFrame.P_FACTOR = 1.3
+    StyleFrame.A_FACTOR = len(df.columns)*1.2
+    StyleFrame.P_FACTOR = 1.1
 
     sf.to_excel(
         excel_writer = excel_writer,

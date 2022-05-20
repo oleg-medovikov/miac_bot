@@ -12,8 +12,7 @@ async def executor():
         return 1
    
     COMMAND = await Command.get(TASK.c_id)
-    
-    
+
     # Запускаем новый тред с процедурой
     with ThreadPoolExecutor() as executor:
         if COMMAND.c_arg == 'no':
@@ -30,9 +29,7 @@ async def executor():
             return 1
         else:
             # Получаем список,кому вернуть результат
-            
             USERS = await TASK.users()
-
             # Возвращаем результат
 
             if COMMAND.return_file:

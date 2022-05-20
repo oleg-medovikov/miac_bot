@@ -2,7 +2,7 @@ import time, datetime, shutil, openpyxl
 from openpyxl.utils.dataframe import dataframe_to_rows
 from base import parus_sql
 
-def svod_29_covid_19():
+async def svod_29_covid_19():
     if int(time.strftime("%H")) < 16:
         SQL = open('func/parus/sql/covid_29_svod1.sql','r').read()
         DATE = datetime.datetime.now() - datetime.timedelta(days=1)
@@ -10,7 +10,8 @@ def svod_29_covid_19():
         SQL = open('func/parus/sql/covid_29_svod0.sql','r').read()
         DATE = datetime.datetime.now()
     
-    df = parus_sql(df)
+    df = parus_sql(SQL)
+
 
     NEW_NAME = 'temp/' + DATE.strftime('%d_%m_%Y') + '_29_COVID_19_cvod.xlsx'
 

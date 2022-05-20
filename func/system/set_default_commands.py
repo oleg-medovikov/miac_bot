@@ -4,6 +4,8 @@ async def set_default_commands(dp):
     commands = [
         BotCommand(command="start",
             description="Приветсвие"),
+        BotCommand(command="tasks",
+            description="Получить файл с заданиями"),
         BotCommand(command="users",
             description="Получить файл с пользователями"),
          BotCommand(command="commands",

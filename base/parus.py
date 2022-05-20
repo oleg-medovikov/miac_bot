@@ -5,7 +5,10 @@ from conf import DATABASE_PARUS
 
 def parus_sql(SQL):
     "Делаем запросы к базе паруса"
-    with cv_Oracle.connect(DATABASE_PARUS, encoding='UTF-8') as CON:
-        df = pd.read_sql(SQL,CON)
-
+    try:
+        with cx_Oracle.connect(DATABASE_PARUS, encoding='UTF-8') as CON:
+            df = pd.read_sql(SQL,CON)
+    except Exception as e:
+        print(e)
+        raise str(e)
     return df

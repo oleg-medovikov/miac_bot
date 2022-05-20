@@ -44,7 +44,8 @@ class Task(BaseModel):
 
     async def get():
         """Взять доступную задачу"""
-        query = t_tasks.select(t_tasks.c.time_start == None)
+        query = t_tasks.select(t_tasks.c.time_start == None)\
+                .order_by(t_tasks.c.time_create)
 
         res = await POSTGRESS_DB.fetch_one(query)
         
