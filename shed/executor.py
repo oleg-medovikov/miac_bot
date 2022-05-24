@@ -25,6 +25,7 @@ async def executor():
             # если что-то поломалось то заканчиваем задачу с ошибкой в комментарии
             TASK.comment = str(e)
             await TASK.stop()
+            await bot.send_message(TASK.client, text=str(e), parse_mode='html')
             return 1
         else:
             # Получаем список,кому вернуть результат

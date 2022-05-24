@@ -1,6 +1,8 @@
 from .postgress import metadata, POSTGRESS_DB, POSTGRESS_EN
 # работа с Парусом
 from .parus import parus_sql
+# Работа с COVID 
+from .covid import covid_sql, covid_exec, covid_insert
 
 # Таблицы обеспечивающие работу бота
 from .users     import t_users

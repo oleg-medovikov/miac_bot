@@ -11,3 +11,7 @@ CHAT_SVALKA_ID = config('chat_svalka_id', cast=int)
 DATABASE_PARUS = config('DATABASE_PARUS', cast=str)
 ORACLE_HOME = config('ORACLE_HOME', cast=str)
 LD_LIBRARY_PATH = config('LD_LIBRARY_PATH', cast=str)
+
+DATABASE_COVID = config('DATABASE_COVID', cast=str)
+DATABASE_MIAC_DS = config('DATABASE_MIAC_DS', cast=str)
+
