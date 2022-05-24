@@ -1,14 +1,14 @@
 from datetime import date
 from uuid import uuid4, UUID
 from pydantic import BaseModel
-
+from typing import Optional
 from base import POSTGRESS_DB, t_users, t_people, t_access
 
 class User(BaseModel):
     u_id        : int
-    first_name  : str
-    last_name   : str
-    username    : str
+    first_name  : Optional[str]
+    last_name   : Optional[str]
+    username    : Optional[str]
     groups      : str
     fio         : str
     description : str
@@ -78,7 +78,11 @@ class User(BaseModel):
     async def access(self):
         "Возвращает список доступных комманд"
         sql = f"""
-        select a.c_id,c.c_name from access as a
+        select 
+            a.c_id,
+            c.c_name,
+            c.asc_day 
+        from access as a
             join commands as c on (a.c_id = c.c_id) 
                 where a.u_id = {self.u_id}
         """

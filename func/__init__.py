@@ -8,3 +8,8 @@ from .admin.check_robot            import check_robot
 
 from .parus.svod_29_covid_19    import svod_29_covid_19
 from .parus.svod_40_covid_19    import svod_40_covid_19
+
+
+## Замечания министерства здравоохранения
+
+from .zam_mz.delete_zam_mz   import delete_zam_mz

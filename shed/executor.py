@@ -15,12 +15,10 @@ async def executor():
 
     # Запускаем новый тред с процедурой
     with ThreadPoolExecutor() as executor:
-        if COMMAND.c_arg == 'no':
+        if TASK.c_arg == 'no':
             future = executor.submit(globals()[COMMAND.c_procedure])
         else:
-            future = executor.submit(
-                    globals()[COMMAND.c_procedure],
-                    COMMAND.c_arg)
+            future = executor.submit(globals()[COMMAND.c_procedure],TASK.c_arg)
         try:
             return_value = await future.result()
         except Exception as e:
