@@ -49,6 +49,12 @@ def check_data_tab(name):
     SELECT 1 ELSE SELECT 0 """
     return covid_sql(sql).iat[0,0]
 
+def UpdateShablonFile(workb, nameSheet, svod, startRows):
+    ws = workb[nameSheet]
+    rows = dataframe_to_rows(svod,index=False, header=False)
+    for r_idx, row in enumerate(rows, startRows):  
+        for c_idx, value in enumerate(row, 1):
+            ws.cell(row=r_idx, column=c_idx, value=value)
 
 class guber_09_debtors(Exception):
     pass
