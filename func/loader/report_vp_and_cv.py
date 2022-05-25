@@ -68,7 +68,7 @@ async def report_vp_and_cv():
         raise my_except(STRING)
     
     for FILE in FILES:
-        os.replace(FILE, PATH + '/' + os.path.basename(file))
+        os.replace(FILE, PATH + '/' + os.path.basename(FILE))
 
     df = pd.concat(list_)
 
