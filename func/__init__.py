@@ -17,4 +17,5 @@ from .zam_mz.delete_zam_mz   import delete_zam_mz
 
 ## Загрузки отчетов
 
-from .loader.report_guber    import report_guber
+from .loader.report_guber      import report_guber
+from .loader.report_vp_and_cv  import report_vp_and_cv

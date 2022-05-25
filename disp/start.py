@@ -74,8 +74,6 @@ async def standart_command_handler(query: types.CallbackQuery, callback_data: di
         time.sleep(2)
         await query.message.delete()
 
-        await query.answer('Задача добавлена, ожидайте результата', show_alert=False)
-
 ## Создание задания после выбора даты из календаря
 @dp.callback_query_handler(simple_cal_callback.filter())
 async def process_simple_calendar(callback_query: types.CallbackQuery, callback_data: dict):

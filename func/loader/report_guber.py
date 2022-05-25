@@ -6,23 +6,31 @@ from ..system.table_one_column import table_one_column
 from base import covid_sql, covid_insert
 from clas import Dir
 
-header_vp = ['idRows','nameMO','indicators','vp_Received_Count_All_SPb','vp_Received_Count_All_LO'
-        ,'vp_Received_Count_toDay_Spb','vp_Received_Count_toDay_LO','vp_Discharged_Count_All_SPb'
-        ,'vp_Discharged_Count_All_LO','vp_Discharged_Count_toDay_Spb','vp_Discharged_Count_toDay_LO'
-        ,'vp_Died_Count_All_SPb','vp_Died_Count_All_LO','vp_Died_Count_toDay_Spb','vp_Died_Count_toDay_LO'
-        ,'vp_Hospital_Count_All','vp_Hospital_Count_Spb','vp_Hospital_Count_LO','vp_Hospital_Count_Ivl'] 
+header_vp = ['idRows','nameMO','indicators','vp_Received_Count_All_SPb',
+        'vp_Received_Count_All_LO','vp_Received_Count_toDay_Spb',
+        'vp_Received_Count_toDay_LO','vp_Discharged_Count_All_SPb'
+        ,'vp_Discharged_Count_All_LO','vp_Discharged_Count_toDay_Spb',
+        'vp_Discharged_Count_toDay_LO','vp_Died_Count_All_SPb',
+        'vp_Died_Count_All_LO','vp_Died_Count_toDay_Spb','vp_Died_Count_toDay_LO'
+        ,'vp_Hospital_Count_All','vp_Hospital_Count_Spb','vp_Hospital_Count_LO'
+        ,'vp_Hospital_Count_Ivl'] 
 
-header_cv = ['idRows','nameMO','indicators','cv_Diagnosis_Count_All_SPb','cv_Diagnosis_Count_All_LO'
-        ,'cv_Diagnosis_Count_toDay_Spb','cv_Diagnosis_Count_toDay_LO','cv_Discharged_Count_All_SPb'
-        ,'cv_Discharged_Count_All_LO','cv_Discharged_Count_toDay_Spb','cv_Discharged_Count_toDay_LO'
-        ,'cv_Died_Count_All_SPb','cv_Died_Count_All_LO','cv_Died_Count_toDay_Spb','cv_Died_Count_toDay_LO'
-        ,'cv_Hospital_Count_All','cv_Hospital_Count_Spb','cv_Hospital_Count_LO','cv_Hospital_Count_Ivl']
+header_cv = ['idRows','nameMO','indicators','cv_Diagnosis_Count_All_SPb',
+        'cv_Diagnosis_Count_All_LO','cv_Diagnosis_Count_toDay_Spb',
+        'cv_Diagnosis_Count_toDay_LO','cv_Discharged_Count_All_SPb'
+        ,'cv_Discharged_Count_All_LO','cv_Discharged_Count_toDay_Spb',
+        'cv_Discharged_Count_toDay_LO','cv_Died_Count_All_SPb',
+        'cv_Died_Count_All_LO','cv_Died_Count_toDay_Spb','cv_Died_Count_toDay_LO'
+        ,'cv_Hospital_Count_All','cv_Hospital_Count_Spb','cv_Hospital_Count_LO'
+        ,'cv_Hospital_Count_Ivl']
 
-header_ivl = ['idRows','nameMO','ivl_Invaz_Count_All','ivl_Invaz_Count_Busy','ivl_Invaz_Count_Free_All'
-        ,'ivl_Invaz_Count_Faulty','ivl_NeInvaz_Count_All','ivl_NeInvaz_Count_Busy','ivl_NeInvaz_Count_Free_All'
+header_ivl = ['idRows','nameMO','ivl_Invaz_Count_All','ivl_Invaz_Count_Busy'
+        ,'ivl_Invaz_Count_Free_All','ivl_Invaz_Count_Faulty',
+        'ivl_NeInvaz_Count_All','ivl_NeInvaz_Count_Busy','ivl_NeInvaz_Count_Free_All'
         ,'ivl_NeInvaz_Count_Faulty','ivl_Pacient_Count_All','ivl_Pacient_Count_Covid']
 
-header_bunk = ['idRows','nameMO','bn_Count_All','bn_Count_Ill_All','bn_Count_Ill_Faulty','bn_Count_Ill_Free']
+header_bunk = ['idRows','nameMO','bn_Count_All','bn_Count_Ill_All',
+        'bn_Count_Ill_Faulty','bn_Count_Ill_Free']
 
 
 def load_sheet(file, sheetName, ColumsName, startRows, header_): 
