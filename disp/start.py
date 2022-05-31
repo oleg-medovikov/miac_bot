@@ -9,7 +9,7 @@ from clas import User, Command, Task, Choice
 
 command = CallbackData('post','id', 'action' )
 
-@dp.message_handler(is_know=True, commands=['start'])
+@dp.message_handler(is_know=True, commands=['start', 'старт'])
 async def send_welcome(message: types.Message):
     USER = await User.get_by_id( message['from']['id'] )
 
