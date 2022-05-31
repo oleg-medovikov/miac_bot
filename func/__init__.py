@@ -7,15 +7,16 @@ from .admin.check_robot            import check_robot
 
 ## Парус!
 
-from .parus.svod_29_covid_19       import svod_29_covid_19
-from .parus.svod_40_covid_19       import svod_40_covid_19
-from .parus.svod_54_covid_19       import svod_54_covid_19
 from .parus.svod_27_covid_19       import svod_27_covid_19
 from .parus.svod_27_covid_19_regiz import svod_27_covid_19_regiz
+from .parus.svod_29_covid_19       import svod_29_covid_19
 from .parus.svod_33_covid_19       import svod_33_covid_19
 from .parus.svod_36_covid_19       import svod_36_covid_19
 from .parus.svod_37_covid_19       import svod_37_covid_19
 from .parus.svod_38_covid_19       import svod_38_covid_19
+from .parus.svod_40_covid_19       import svod_40_covid_19
+from .parus.svod_54_covid_19       import svod_54_covid_19
+
 
 ## Замечания министерства здравоохранения
 
