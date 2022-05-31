@@ -3,6 +3,9 @@ from .postgress import metadata, POSTGRESS_DB, POSTGRESS_EN
 from .parus import parus_sql
 # Работа с COVID 
 from .covid import covid_sql, covid_exec, covid_insert
+# Работа с NsiBase
+from .nsibase import nsi_sql
+
 
 # Таблицы обеспечивающие работу бота
 from .users     import t_users
