@@ -2,12 +2,18 @@ import time, datetime, shutil, openpyxl
 from openpyxl.utils.dataframe import dataframe_to_rows
 from base import parus_sql
 
+class no_data(Exception):
+    pass
+
 async def svod_51_covid_19():
     SQL_1 = open('func/parus/sql/covid_51_svod.sql', 'r').read()
     SQL_2 = open('func/parus/sql/covid_51_svod_all.sql', 'r').read()
 
     DF  = parus_sql(SQL_1)
     ALL = parus_sql(SQL_2)
+
+    if len(DF) == 0:
+        raise no_data('Нет данных на сегодня')
 
     DATE = DF.at[0, 'DAY']
     del DF['DAY']
