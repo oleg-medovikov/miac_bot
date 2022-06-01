@@ -20,6 +20,7 @@ from .parus.svod_40_covid_19       import svod_40_covid_19
 from .parus.svod_40_covid_19_dates import svod_40_covid_19_dates
 from .parus.svod_43_covid_19       import svod_43_covid_19
 from .parus.svod_50_covid_19       import svod_50_covid_19
+from .parus.svod_51_covid_19       import svod_51_covid_19
 from .parus.svod_54_covid_19       import svod_54_covid_19
 
 
