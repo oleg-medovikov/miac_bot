@@ -7,7 +7,7 @@ async def svod_40_covid_19():
     sql_01 = open('func/parus/sql/covid_40_spytnic.sql','r').read()
     sql_02 = open('func/parus/sql/covid_40_spytnic_old.sql','r').read()
     sql_03 = open('func/parus/sql/covid_40_epivak.sql','r').read()
-    sql_04 = open('func/parus/sql/covid_40_epivak_old','r').read()
+    sql_04 = open('func/parus/sql/covid_40_epivak_old.sql','r').read()
     sql_05 = open('func/parus/sql/covid_40_covivak.sql','r').read()
     sql_06 = open('func/parus/sql/covid_40_covivak_old.sql','r').read()
     sql_07 = open('func/parus/sql/covid_40_revac.sql','r').read()
