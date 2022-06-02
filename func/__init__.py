@@ -8,6 +8,7 @@ from .admin.check_robot            import check_robot
 ## Парус!
 
 from .parus.svod_4_2_covid_19      import svod_4_2_covid_19
+from .parus.svod_4_3_covid_19      import svod_4_3_covid_19
 from .parus.svod_26_covid_19       import svod_26_covid_19
 from .parus.svod_27_covid_19       import svod_27_covid_19
 from .parus.svod_27_covid_19_regiz import svod_27_covid_19_regiz

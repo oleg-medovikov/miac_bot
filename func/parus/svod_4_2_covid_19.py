@@ -1,7 +1,7 @@
 import time, datetime, shutil, openpyxl
 from openpyxl.utils.dataframe import dataframe_to_rows
 from base import parus_sql
-
+import pandas as pd
 
 NAMES = [
 'region','ORGANIZATION','FULLNAME','MIAC_COVID4.2_vrach','MIAC_COVID4.2_telefo',
@@ -38,7 +38,7 @@ NAMES = [
 async def svod_4_2_covid_19():
     SQL = open('func/parus/sql/covid_4.2_svod.sql', 'r').read()
 
-    DF = read_sql( SQL )
+    DF = parus_sql( SQL )
 
     DATE = DF.at[0, 'DAY']
     del DF['DAY']
@@ -49,11 +49,11 @@ async def svod_4_2_covid_19():
 
     ot = pd.DataFrame(columns=NAMES)
 
-    ot['ORGANIZATION'] = pd.Series(df['ORGANIZATION'].unique())
+    ot['ORGANIZATION'] = pd.Series(DF['ORGANIZATION'].unique())
     ot['FULLNAME'] = ot['ORGANIZATION']
 
     for i in range(len(DF)):
-        if DF.at[i,'POKAZATEL'] in names:
+        if DF.at[i,'POKAZATEL'] in NAMES:
             ot.loc[ot['ORGANIZATION'] == DF.at[i,'ORGANIZATION'], DF.at[i,'POKAZATEL'] ] = DF.at[i,'VALUE']
 
     ot['region'] = 'г. Санкт-Петербург'
