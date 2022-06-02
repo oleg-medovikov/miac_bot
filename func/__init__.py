@@ -7,6 +7,7 @@ from .admin.check_robot            import check_robot
 
 ## Парус!
 
+from .parus.svod_4_2_covid_19      import svod_4_2_covid_19
 from .parus.svod_26_covid_19       import svod_26_covid_19
 from .parus.svod_27_covid_19       import svod_27_covid_19
 from .parus.svod_27_covid_19_regiz import svod_27_covid_19_regiz
@@ -25,6 +26,8 @@ from .parus.svod_51_covid_19       import svod_51_covid_19
 from .parus.svod_52_covid_19       import svod_52_covid_19
 from .parus.svod_54_covid_19       import svod_54_covid_19
 from .parus.extra_izv              import extra_izv
+from .parus.distant_consult        import distant_consult
+
 
 ## Замечания министерства здравоохранения
 
