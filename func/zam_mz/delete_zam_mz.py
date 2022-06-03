@@ -4,7 +4,7 @@ from clas import Dir
 
 async def delete_zam_mz(DATE):
     DATE = datetime.datetime.strptime(DATE, '%d-%m-%Y').strftime('%Y-%m-%d')    
-    MASK = Dir.get('covid') + f"/EPID.COVID.*/EPID.COVID.*/Замечания Мин. Здравоохранения/{DATE}*.xlsx"
+    MASK = await Dir.get('covid') + f"/EPID.COVID.*/EPID.COVID.*/Замечания Мин. Здравоохранения/{DATE}*.xlsx"
     
     FILES = glob.glob( MASK )
 
