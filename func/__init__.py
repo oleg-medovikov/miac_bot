@@ -30,12 +30,11 @@ from .parus.svod_54_covid_19       import svod_54_covid_19
 from .parus.extra_izv              import extra_izv
 from .parus.distant_consult        import distant_consult
 
-
 ## Замечания министерства здравоохранения
 
 from .zam_mz.delete_zam_mz   import delete_zam_mz
 
-## Загрузки отчетов
+## Загрузки отчётов
 
 from .loader.report_guber      import report_guber
 from .loader.report_vp_and_cv  import report_vp_and_cv
