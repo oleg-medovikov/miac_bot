@@ -1,5 +1,4 @@
 from pydantic import BaseModel, Field
-from sqlalchemy import and_
 
 from base import POSTGRESS_DB, t_access
 

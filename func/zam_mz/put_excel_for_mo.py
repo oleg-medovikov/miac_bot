@@ -25,7 +25,7 @@ async def put_excel_for_mo(DF,NAME,DATE):
         USER = await Dir.get( ORG )
         
         if USER:
-            PATH = ROOT + USER + 'Замечания Мин. Здравоохранения'
+            PATH = ROOT + USER
             try:
                 os.makedirs( PATH )
             except OSError:
