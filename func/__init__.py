@@ -32,8 +32,18 @@ from .parus.distant_consult        import distant_consult
 
 ## Замечания министерства здравоохранения
 
-from .zam_mz.delete_zam_mz   import delete_zam_mz
-
+from .zam_mz.delete_zam_mz     import delete_zam_mz
+from .zam_mz.no_snils          import no_snils
+from .zam.bez_izhoda           import bez_izhoda 
+from .zam.bez_ambulat_level    import bez_ambulat_level
+from .zam.no_OMS               import no_OMS
+from .zam.neveren_vid_lechenia import neveren_vid_lechenia
+from .zam.no_lab               import no_lab
+from .zam.net_diagnoz_covid    import net_diagnoz_covid
+from .zam.no_pad               import no_pad
+from .zam.net_dnevnik          import net_dnevnik
+from .zam.zavishie_statusy     import zavishie_statusy
+from .zam.load_snils_comment   import load_snils_comment
 ## Загрузки отчётов
 
 from .loader.report_guber      import report_guber
