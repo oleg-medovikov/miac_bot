@@ -60,6 +60,8 @@ async def report_vp_and_cv():
             EXCEL, nameMO = load_file_mo( FILE )
             if len(EXCEL.dtype.unique) > 1:
                 raise my_except(f"В файле {FILE.rsplit('/',1)[1]} неправильные данные")
+            else:
+                EXCEL ['nameMO'] = nameMO
         except:
             ERROR.loc[len(ERROR), 'Не обработаны файлы'] = FILE.rsplit('/',1)[1]
         else:
