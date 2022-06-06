@@ -46,6 +46,7 @@ from .zam_mz.zavishie_statusy     import zavishie_statusy
 from .zam_mz.load_snils_comment   import load_snils_comment
 from .zam_mz.ivl                  import IVL
 from .zam_mz.zamechania           import zamechania
+from .zam_mz.zamechania_file      import zamechania_file
 ## Загрузки отчётов
 
 from .loader.report_guber      import report_guber
