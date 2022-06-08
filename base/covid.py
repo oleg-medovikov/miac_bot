@@ -1,5 +1,6 @@
 import pandas as pd
 import sqlalchemy
+from sqlalchemy.orm import sessionmaker
 
 from conf import DATABASE_COVID
 

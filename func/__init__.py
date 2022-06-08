@@ -52,4 +52,68 @@ from .zam_mz.zamechania_file      import zamechania_file
 from .loader.report_guber      import report_guber
 from .loader.report_vp_and_cv  import report_vp_and_cv
 
+functions = {
+        'check_robot'             : check_robot,
+        'svod_4_2_covid_19'       : svod_4_2_covid_19,
+        'svod_4_3_covid_19'       : svod_4_3_covid_19,
+        'svod_26_covid_19'        : svod_26_covid_19,
+        'svod_27_covid_19'        : svod_27_covid_19,
+        'svod_27_covid_19_regiz'  : svod_27_covid_19_regiz,
+        'svod_27_covid_small'     : svod_27_covid_small,
+        'svod_28_covid_19'        : svod_28_covid_19,
+        'svod_29_covid_19'        : svod_29_covid_19,
+        'svod_33_covid_19'        : svod_33_covid_19,
+        'svod_36_covid_19'        : svod_36_covid_19,
+        'svod_37_covid_19'        : svod_37_covid_19,
+        'svod_38_covid_19'        : svod_38_covid_19,
+        'svod_40_covid_19'        : svod_40_covid_19,
+        'svod_40_covid_19_dates'  : svod_40_covid_19_dates,
+        'svod_43_covid_19'        : svod_43_covid_19,
+        'svod_50_covid_19'        : svod_50_covid_19,
+        'svod_51_covid_19'        : svod_51_covid_19,
+        'svod_52_covid_19'        : svod_52_covid_19,
+        'svod_53_covid_19'        : svod_53_covid_19,
+        'svod_54_covid_19'        : svod_54_covid_19,
+        'extra_izv'               : extra_izv,
+        'distant_consult'         : distant_consult,
+
+        'delete_zam_mz'           : delete_zam_mz,
+        'no_snils'                : no_snils,
+        'bez_izhoda'              : bez_izhoda,
+        'bez_ambulat_level'       : bez_ambulat_level,
+        'no_OMS'                  : no_OMS,
+        'neveren_vid_lechenia'    : neveren_vid_lechenia,
+        'no_lab'                  : no_lab,
+        'net_diagnoz_covid'       : net_diagnoz_covid,
+        'no_pad'                  : no_pad,
+        'net_dnevnik'             : net_dnevnik,
+        'zavishie_statusy'        : zavishie_statusy,
+        'load_snils_comment'      : load_snils_comment,
+        'IVL'                     : IVL,
+        'zamechania'              : zamechania,
+        'zamechania_file'         : zamechania_file,
+
+        'report_guber'            : report_guber,
+        'report_vp_and_cv'        : report_vp_and_cv,
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

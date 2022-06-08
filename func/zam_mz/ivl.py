@@ -3,7 +3,7 @@ import pandas as pd
 from .put_excel_for_mo import put_excel_for_mo
 from .put_svod_for_mo  import put_svod_for_mo
 
-from clas import Doc
+from clas import Dir
 
 CHANGE_MO =[
 [r'Больница №20 Поликлиническое отделение №42 (площадка Ленсовета)'
@@ -51,7 +51,7 @@ CHANGE_MO =[
     ]
 
 S_org = [
-'ФГБОУ ВО СЗГМУ им. И.И. Мечникова Минздрава России',
+'ФГБОУ ВО СЗГМУ им. И.И. Мечникова Минздрава России'
 ,'ФГБОУ ВО ПСПбГМУ им. И.П.Павлова Минздрава России'
 ,'СПб ГБУЗ "Городская больница №40"'
 ,'СПб ГБУЗ "Городская больница №20"'

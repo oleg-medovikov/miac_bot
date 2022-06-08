@@ -1,6 +1,7 @@
 SELECT to_char(day, 'YYYY_MM_DD') day, pok02,
     nvl(cast(pok03 as int),0)  pok03,nvl(cast(pok05 as int),0)  pok05,
-    nvl(cast(pok06 as int),0)  pok06,nvl(cast(pok07 as int),0)  pok07
+    nvl(cast(pok06 as int),0)  pok06,nvl(cast(pok07 as int),0)  pok07,
+    nvl(cast(pok04 as int),0)  pok04
 FROM (
         SELECT
             r.BDATE day,a.AGNNAME organization,i.CODE pokazatel,ro.NUMB row_index,
@@ -27,12 +28,12 @@ FROM (
         on(rd.PRN = rf.RN)
         WHERE rf.code = '54 COVID 19'
         and r.BDATE =  trunc(SYSDATE)
-        and i.CODE in  ('exp_test_01', 'exp_test_02','exp_test_03','exp_test_05','exp_test_06','exp_test_07')
+        and i.CODE in  ('exp_test_01', 'exp_test_02','exp_test_03','exp_test_04','exp_test_05','exp_test_06','exp_test_07')
                 )
         pivot
         (
         max(value)
-        FOR POKAZATEL IN ('exp_test_02' pok02, 'exp_test_03' pok03,
+        FOR POKAZATEL IN ('exp_test_02' pok02, 'exp_test_03' pok03, 'exp_test_04' pok04,
 						  'exp_test_05' pok05, 'exp_test_06' pok06, 'exp_test_07' pok07)
         )
         WHERE pok02 IS NOT null    

@@ -18,7 +18,7 @@ async def zamechania_file():
     SELECT max([Дата изменения РЗ]) as 'дата отчета'
         FROM robo.v_FedReg
     """
-    DATE = covid_sql( SQL )
+    DATE = covid_sql( SQL ).iat[0,0]
 
     SQL = open('func/zam_mz/sql/kolichestvo.sql', 'r')
 
@@ -46,11 +46,11 @@ async def zamechania_file():
     DF.index = range(len(DF))
 
     
-    NEW_FILE = "temp/Замечания_за_" + str(DATE.iat[0,0]) + ".xlsx"
-    shutil.copyfile(get_dir('help/Zamechania.xlsx',  file)
-  
+    NEW_FILE = "temp/Замечания_за_" + DATE.strftime('%Y-%m-%d') + ".xlsx"
+    shutil.copyfile( 'help/Zamechania.xlsx',  NEW_FILE)
+
     wb = openpyxl.load_workbook( NEW_FILE )
-    
+
     ws = wb['main']   
     PART = DF.copy()
     del PART ['Тип организации']

@@ -1,12 +1,17 @@
 from disp import bot
+from base import POSTGRESS_DB 
 
 from clas import Task, Command
 from func import *
 
 from concurrent.futures import ThreadPoolExecutor
-import os
+import os, warnings
+
+warnings.filterwarnings("ignore")
 
 async def executor():
+    await POSTGRESS_DB.connect()
+    
     TASK = await Task.get()
     if TASK is None:
         return 1

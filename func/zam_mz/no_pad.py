@@ -3,7 +3,7 @@ from .put_svod_for_mo  import put_svod_for_mo
 from .put_excel_for_mo import put_excel_for_mo
 
 async def no_pad():
-    SQL = open('func/zam_mz/sql/no_pad.sql', 'r').read()
+    SQL = open('func/zam_mz/sql/net_pad.sql', 'r').read()
 
     DF = covid_sql( SQL )
 

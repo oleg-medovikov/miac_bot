@@ -1,4 +1,4 @@
-import datetime
+import datetime, os
 import pandas as pd
 from clas import Dir
 
@@ -18,7 +18,7 @@ async def put_excel_for_mo(DF,NAME,DATE):
         STAT.loc[ len(STAT),'Медицинская организация'] = ORG
         
         PART = DF.loc[DF['Медицинская организация'] == ORG ]
-        PART.index = range(1,len(part)+1)
+        PART.index = range(1, len( PART )+1)
         PART.fillna(0, inplace = True)
         PART = PART.applymap(str)
         
@@ -33,7 +33,7 @@ async def put_excel_for_mo(DF,NAME,DATE):
 
             FILE = PATH + '/' + DATE + ' ' + NAME + '.xlsx'
             
-            with pd.ExcelWriter(file) as writer:
+            with pd.ExcelWriter( FILE ) as writer:
                 PART.to_excel(writer,sheet_name='унрз')
             
             STAT.loc[len(STAT) - 1, 'Статус']    = 'Файл положен'
@@ -46,6 +46,6 @@ async def put_excel_for_mo(DF,NAME,DATE):
     STAT_FILE = 'temp/отчёт по разложению ' + NAME + '.xlsx'
 
     with pd.ExcelWriter( STAT_FILE ) as writer:
-        stat.to_excel(writer,sheet_name='унрз') 
+        STAT.to_excel(writer,sheet_name='унрз') 
 
     return STAT_FILE

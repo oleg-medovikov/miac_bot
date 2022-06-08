@@ -25,11 +25,11 @@ async def zamechania():
     SQL = open('func/zam_mz/sql/kolichestvo.sql').read()
 
     DF = covid_sql( SQL )
-    del DF ['принадлежность']
+    del DF ['Принадлежность']
     DF ['дата отчета'] = DATE
 
     for FILE,NAME in SQL_NAMES:
-        SQL = open('func/zam_mz/sql/' + file, 'r').read()
+        SQL = open('func/zam_mz/sql/' + FILE, 'r').read()
         PART = covid_sql( SQL )
         PART = PART.groupby(
                 by=["Медицинская организация"],
@@ -45,7 +45,7 @@ async def zamechania():
 
     SQL = f"""
     DELETE from [robo].[cv_Zamechania_fr]
-        WHERE [дата отчета] ='{date.iat[0,0]}'
+        WHERE [дата отчета] ='{DATE.strftime('%Y-%m-%d')}'
         """
 
     covid_exec( SQL )
@@ -58,5 +58,6 @@ async def zamechania():
             'robo',
             False,
             'append')
-    return 1
+
+    return 'Замечания сгенерированы'
 

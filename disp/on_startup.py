@@ -8,7 +8,8 @@ import asyncio
 async def on_startup(dp):
     await POSTGRESS_DB.connect()
     await Task.restart()
-    asyncio.create_task(scheduler())
+
+    #asyncio.create_task(scheduler())
     await set_default_commands(dp)
 
 

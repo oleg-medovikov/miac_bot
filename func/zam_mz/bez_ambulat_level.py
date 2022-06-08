@@ -7,7 +7,7 @@ async def bez_ambulat_level():
     ROOT = 'func/zam_mz/sql/'
     SQL_1 = open(ROOT + 'bez_ambulat_level.sql', 'r').read()
     SQL_2 = open(ROOT + 'bez_ambulat_level_death_covid.sql', 'r').read()
-    SQL_3 = open(ROOT + 'bez_ambulat_level_death_nocovid', 'r').read()
+    SQL_3 = open(ROOT + 'bez_ambulat_level_death_nocovid.sql', 'r').read()
 
     DF_1 = covid_sql( SQL_1 )
     DF_2 = covid_sql( SQL_2 )
@@ -19,7 +19,7 @@ async def bez_ambulat_level():
             None)
     STAT_2 = await put_excel_for_mo(
             DF_2,
-            'Нет амбулаторного этапа, умер не от COVID',
+            'Нет амбулаторного этапа, умер от COVID',
             None)
     STAT_3 = await put_excel_for_mo(
             DF_3,
@@ -31,7 +31,7 @@ async def bez_ambulat_level():
             None)
     await put_svod_for_mo(
             DF_2,
-            'Нет амбулаторного этапа, умер не от COVID',
+            'Нет амбулаторного этапа, умер от COVID',
             None)
     await put_svod_for_mo(
             DF_3,

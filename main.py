@@ -1,5 +1,6 @@
 from disp import dp, on_startup
 from aiogram import executor
+from shed import scheduler
 import warnings
 
 warnings.filterwarnings("ignore")

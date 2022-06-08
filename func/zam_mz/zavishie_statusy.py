@@ -20,7 +20,7 @@ async def zavishie_statusy():
 
     STAT_2 = await put_excel_for_mo(
             DF_2,
-            'зависшие статусы',
+            'зависшие статусы без МО прикрепления',
             None)
     await put_svod_for_mo(
             DF_2,
