@@ -9,8 +9,8 @@ from clas import User, Command, Task, Choice
 
 command = CallbackData('post','id', 'action' )
 
-asyncio.set_event_loop(asyncio.new_event_loop()) 
-LOOP = asyncio.new_event_loop()
+#asyncio.set_event_loop(asyncio.new_event_loop()) 
+#LOOP = asyncio.new_event_loop()
 
 
 @dp.message_handler(is_know=True, commands=['start', 'старт'])
@@ -78,15 +78,17 @@ async def standart_command_handler(query: types.CallbackQuery, callback_data: di
                 comment = None
                 )
         if await TASK.add():
-            await query.answer(
-                    'Задача добавлена, ожидайте результата',
-                    show_alert=False)
-            try:
-                await query.message.delete()
-            except:
-                pass
+            mess = 'Задача добавлена, ожидайте результата',
+        else:
+            mess = 'Команда уже запущена другим пользователем, ожидайте ответ',
+        
+        await query.answer(mess, show_alert=False)
+        try:
+            await query.message.delete()
+        except:
+            pass
            
-            return LOOP.create_task(background_task(TASK, COMMAND) )
+            #return LOOP.create_task(background_task(TASK, COMMAND) )
             #return LOOP.run_until_complete(background_task(TASK, COMMAND) )
 
             #await asyncio.to_thread(background_task, TASK, COMMAND)
@@ -97,15 +99,6 @@ async def standart_command_handler(query: types.CallbackQuery, callback_data: di
             
             #await background_task(TASK, COMMAND)
 
-        else:
-            # Если команда уже создана и выполняется
-            await query.answer(
-                    'Команда уже запущена другим пользователем, ожидайте ответ',
-                    show_alert=False)
-            try:
-                await query.message.delete()
-            except:
-                pass
 
 ## Создание задания после выбора даты из календаря
 @dp.callback_query_handler(simple_cal_callback.filter())
@@ -133,30 +126,21 @@ async def process_simple_calendar(callback_query: types.CallbackQuery, callback_
     await callback_query.message.answer(f'Для команды "{COMMAND.c_name}" выбрана дата {date.strftime("%d.%m.%Y")}' )
 
     if await TASK.add():
-        await query.answer(
-                'Задача добавлена, ожидайте результата',
-                show_alert=False)
-        try:
-            await query.message.delete()
-        except:
-            pass
-        
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        asyncio.ensure_future(background_task(loop,TASK, COMMAND))
-
+        mess = 'Задача добавлена, ожидайте результата',
     else:
-        # Если команда уже создана и выполняется
-        await query.answer(
-                'Команда уже запущена другим пользователем, ожидайте ответ',
-                show_alert=False)
-        try:
-            await query.message.delete()
-        except:
-            pass
+        mess = 'Команда уже запущена другим пользователем, ожидайте ответ',
 
+    await query.answer(mess, show_alert=False)
+    try:
+        await query.message.delete()
+    except:
+        pass
+        
+        #loop = asyncio.new_event_loop()
+        #asyncio.set_event_loop(loop)
+        #asyncio.ensure_future(background_task(loop,TASK, COMMAND))
 
-
+"""
 async def background_task(TASK : Task, COMMAND : Command):
     print(1)
     try:
@@ -185,3 +169,4 @@ async def background_task(TASK : Task, COMMAND : Command):
         else:
             for USER in USERS:
                 await bot.send_message(chat_id=USER, text=return_value)
+"""
