@@ -11,11 +11,10 @@ warnings.filterwarnings("ignore")
 
 async def executor():
     #await POSTGRESS_DB.connect()
-    
     TASK = await Task.get()
     if TASK is None:
         return 1
-   
+    
     COMMAND = await Command.get(TASK.c_id)
 
     # Запускаем новый тред с процедурой

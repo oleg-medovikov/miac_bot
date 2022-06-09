@@ -49,11 +49,11 @@ class Task(BaseModel):
             query = t_tasks.insert().values(self.__dict__)
             await POSTGRESS_DB.execute(query)
             
-            query = t_tasks.update()\
-                    .where(t_tasks.c.t_id == self.t_id)\
-                    .values(time_start = datetime.now())
+            #query = t_tasks.update()\
+            #        .where(t_tasks.c.t_id == self.t_id)\
+            #        .values(time_start = datetime.now())
         
-            await POSTGRESS_DB.execute(query)
+            #await POSTGRESS_DB.execute(query)
 
             return True
 
