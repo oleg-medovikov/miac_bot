@@ -10,7 +10,7 @@ from clas import User, Command, Task, Choice
 command = CallbackData('post','id', 'action' )
 
 asyncio.set_event_loop(asyncio.new_event_loop()) 
-LOOP = asyncio.get_event_loop()
+LOOP = asyncio.new_event_loop()
 
 
 @dp.message_handler(is_know=True, commands=['start', 'старт'])
@@ -87,6 +87,7 @@ async def standart_command_handler(query: types.CallbackQuery, callback_data: di
                 pass
            
             return LOOP.create_task(background_task(TASK, COMMAND) )
+            #return LOOP.run_until_complete(background_task(TASK, COMMAND) )
 
             #await asyncio.to_thread(background_task, TASK, COMMAND)
             #loop = asyncio.get_running_loop()
@@ -153,7 +154,6 @@ async def process_simple_calendar(callback_query: types.CallbackQuery, callback_
             await query.message.delete()
         except:
             pass
-
 
 
 
