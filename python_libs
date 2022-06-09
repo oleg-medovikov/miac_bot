@@ -1,0 +1,13 @@
+aiogram
+starlette
+pydantic
+databases
+asyncpg
+psycopg2-binary
+cx_Oracle
+pandas
+numpy
+styleframe
+aioschedule
+aiogram_calendar
+pymssql

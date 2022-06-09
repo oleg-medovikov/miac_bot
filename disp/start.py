@@ -9,6 +9,10 @@ from clas import User, Command, Task, Choice
 
 command = CallbackData('post','id', 'action' )
 
+asyncio.set_event_loop(asyncio.new_event_loop()) 
+LOOP = asyncio.get_event_loop()
+
+
 @dp.message_handler(is_know=True, commands=['start', 'старт'])
 async def send_welcome(message: types.Message):
     USER = await User.get_by_id( message['from']['id'] )
@@ -82,14 +86,15 @@ async def standart_command_handler(query: types.CallbackQuery, callback_data: di
             except:
                 pass
            
+            return LOOP.create_task(background_task(TASK, COMMAND) )
 
-            #asyncio.to_thread(background_task(TASK, COMMAND))
+            #await asyncio.to_thread(background_task, TASK, COMMAND)
             #loop = asyncio.get_running_loop()
             #await loop.run_in_executor(None, background_task, TASK, COMMAND)
             
-            #asyncio.create_subprocess_exec(background_task(TASK, COMMAND))
+            #await asyncio.create_subprocess_exec(background_task,TASK, COMMAND)
             
-            await background_task(TASK, COMMAND)
+            #await background_task(TASK, COMMAND)
 
         else:
             # Если команда уже создана и выполняется
