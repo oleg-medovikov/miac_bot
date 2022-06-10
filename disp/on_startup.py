@@ -9,5 +9,9 @@ async def on_startup(dp):
     await POSTGRESS_DB.connect()
     await Task.restart()
     await set_default_commands(dp)
-    asyncio.create_task(scheduler())
+    while True:
+        try:
+            await dp.start_polling()
+        except:
+            asyncio.sleep(5)
 
