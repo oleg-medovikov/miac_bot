@@ -2,49 +2,60 @@ import time, datetime, shutil, openpyxl
 from openpyxl.utils.dataframe import dataframe_to_rows
 from base import parus_sql
 
+import pandas as pd 
+
+
+PART_NOMER = ['01','02','03','04','05','06','07','08','09','10']
+
+COLUMNS = ['exp_test_01_01', 'exp_test_02_01', 'exp_test_03_01', 'exp_test_04_01',
+           'exp_test_05_01','exp_test_06_01', 'exp_test_07_01', 'exp_test_08_01',
+           'exp_test_09_01']
+
 
 async def svod_54_covid_19():
-    SQL_1 = open('func/parus/sql/covid_54_svod.sql', 'r').read()
-    #SQL_2 = open('func/parus/sql/covid_54_error.sql', 'r').read()
-    SQL_3 = open('func/parus/sql/covid_54_2_svod.sql', 'r').read()
+    SQL = open('func/parus/sql/covid_54_svod_new.sql', 'r').read()
 
-    DF_1 = parus_sql(SQL_1) 
+    DF = parus_sql(SQL) 
 
-    #ERROR = parus_sql(SQL_2)
 
-    DF_2 = parus_sql(SQL_3)
+    DATE = DF.at[0,'DAY']
 
-    DATE_1 = DF_1.at[0,'DAY']
-    del DF_1['DAY']
-    DATE_2 = DF_2.at[0,'DAY']
-    del DF_2['DAY']
+    del DF['DAY']
 
-    NEW_NAME_1 = 'temp/54_COVID_19_'   + DATE_1 + '.xlsx'
-    NEW_NAME_2 = 'temp/54_2_COVID_19_' + DATE_2 + '.xlsx'
+    NEW_NAME = 'temp/54_COVID_19_'   + DATE.strftime('%d_%m_%Y') + '.xlsx'
 
-    shutil.copyfile('help/54_COVID_19_svod.xlsx', NEW_NAME_1)
-    shutil.copyfile('help/54_2_COVID_19_svod.xlsx', NEW_NAME_2)
+    shutil.copyfile('help/54_COVID_19_new.xlsx', NEW_NAME)
 
-    wb = openpyxl.load_workbook(NEW_NAME_1)
-    ws = wb['svod']
+    for NOMER in PART_NOMER:
+        # Вытаскиваем кусок данных про конкретную партию
+        PART = DF.loc[DF['POKAZATEL'].str.endswith( NOMER )]
 
-    rows = dataframe_to_rows(DF_1,index=False, header=False)
-    for r_idx, row in enumerate(rows,4):
-        for c_idx, value in enumerate(row, 3):
-            ws.cell(row=r_idx, column=c_idx, value=value)
+        PART = PART.pivot_table(index = 'ORGANIZATION', columns = ['POKAZATEL'],aggfunc='first').stack(0)
 
-    wb.save(NEW_NAME_1)
+        PART.fillna(0,inplace=True)
 
-    wb = openpyxl.load_workbook(NEW_NAME_2)
-    ws = wb['svod']
+        for COL in COLUMNS:
+            if COL not in PART.columns:
+                 PART[COL] = 0
+            else:
+                PART[COL] = pd.to_numeric(PART[COL], errors='ignore')
 
-    rows = dataframe_to_rows(DF_2,index=False, header=False)
-    for r_idx, row in enumerate(rows,3):
-        for c_idx, value in enumerate(row, 2):
-            ws.cell(row=r_idx, column=c_idx, value=value)
+        PART.columns = COLUMNS
+        
+        
+        wb = openpyxl.load_workbook(NEW_NAME)
 
-    wb.save(NEW_NAME_2)
+        ws = wb['part ' + NOMER ]
+        
+        rows = dataframe_to_rows(PART,index=False, header=True)
+        for r_idx, row in enumerate(rows,2):
+            for c_idx, value in enumerate(row, 2):
+                ws.cell(row=r_idx, column=c_idx, value=value)
 
-    return NEW_NAME_1 + ';' + NEW_NAME_2
+
+    
+    wb.save( NEW_NAME )
+
+    return NEW_NAME
 
 
