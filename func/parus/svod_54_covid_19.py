@@ -26,6 +26,8 @@ async def svod_54_covid_19():
 
     shutil.copyfile('help/54_COVID_19_new.xlsx', NEW_NAME)
 
+    wb = openpyxl.load_workbook(NEW_NAME)
+    
     for NOMER in PART_NOMER:
         # Вытаскиваем кусок данных про конкретную партию
         PART = DF.loc[DF['POKAZATEL'].str.endswith( NOMER )]
@@ -35,6 +37,7 @@ async def svod_54_covid_19():
         PART.fillna(0,inplace=True)
 
         for COL in COLUMNS:
+            COL = COL[:-2] + NOMER
             if COL not in PART.columns:
                  PART[COL] = 0
             else:
@@ -42,9 +45,6 @@ async def svod_54_covid_19():
 
         PART.columns = COLUMNS
         
-        
-        wb = openpyxl.load_workbook(NEW_NAME)
-
         ws = wb['part ' + NOMER ]
         
         rows = dataframe_to_rows(PART,index=False, header=True)
