@@ -2,7 +2,9 @@ from datetime import date
 from uuid import uuid4, UUID
 from pydantic import BaseModel
 from typing import Optional
-from base import POSTGRESS_DB, t_users, t_people, t_access
+
+from conf import MIAC_API_URL, TOKEN
+import requests 
 
 class User(BaseModel):
     u_id        : int
@@ -13,19 +15,19 @@ class User(BaseModel):
     fio         : str
     description : str
 
-    async def add(self):
+    async def add(self, USER_ID ):
         "Добавление пользователя в таблицу пользователей"
-        
-        query = t_users.select(t_users.c.u_id == self.u_id)
-        res = await POSTGRESS_DB.fetch_one(query)
 
-        if not res is None:
-            query = t_users.delete(t_users.c.u_id == self.u_id)
-            await POSTGRESS_DB.execute(query)
+        HEADERS = dict(
+                KEY = TOKEN,
+                UID = USER_ID
+                )
+        BODY = self.__dict__
+        URL = MIAC_API_URL + '/add_user'
 
-        query = t_users.insert().values(self.__dict__)
-        await POSTGRESS_DB.execute(query)
+        req = requests.post(URL, headers=HEADERS, json=BODY )
 
+"""
     async def add_people(self):
         "Добавим людей которые писали боту"
         query = t_people.select(t_people.c.u_id == self.u_id)
@@ -39,51 +41,52 @@ class User(BaseModel):
             MAN.pop('description')
             query = t_people.insert().values(MAN)
             await POSTGRESS_DB.execute(query)
-    
+"""    
     async def get_by_id(U_ID):
         "Взять пользователя по id"
-        query = t_users.select(t_users.c.u_id == U_ID)
+        HEADERS = dict(
+                KEY = TOKEN,
+                UID = USER_ID
+                )
+        URL = MIAC_API_URL + '/get_user_by_id'
 
-        res = await POSTGRESS_DB.fetch_one(query)
-
-        if not res is None:
-            return User(**res)
-
+        req = requests.get(URL, headers=HEADERS )
+        
+        if not req.json() is None:
+            return User(**req.json())
 
     async def check(self) -> bool:
         "Проверка пользователя на наличие в базе"
-        query = t_users.select(t_users.c.u_id == self.u_id )
+        HEADERS = dict(
+                KEY = TOKEN,
+                UID = USER_ID
+                )
+        URL = MIAC_API_URL + '/is_known'
 
-        res = await POSTGRESS_DB.fetch_one(query)
-
-        if not res is None:
-            return True
-        else:
-            return False
+        req = requests.get(URL, headers=HEADERS )
+ 
+        return req.json()
 
     async def admin(self) -> bool:
         "Проверка на администратора"
-        query = t_users.select(t_users.c.u_id == self.u_id)
+        HEADERS = dict(
+                KEY = TOKEN,
+                UID = USER_ID
+                )
+        URL = MIAC_API_URL + '/is_admin'
 
-        res = await POSTGRESS_DB.fetch_one(query)
-
-        if res is None:
-            return False
-
-        if res['groups'] == 'admin':
-            return True
-        else:
-            return False
+        req = requests.get(URL, headers=HEADERS )
+ 
+        return req.json()
 
     async def access(self):
         "Возвращает список доступных комманд"
-        sql = f"""
-        select 
-            a.c_id,
-            c.c_name,
-            c.asc_day 
-        from access as a
-            join commands as c on (a.c_id = c.c_id) 
-                where a.u_id = {self.u_id}
-        """
-        return await POSTGRESS_DB.fetch_all(sql)
+        HEADERS = dict(
+                KEY = TOKEN,
+                UID = USER_ID
+                )
+        URL = MIAC_API_URL + '/user_commands'
+
+        req = requests.get(URL, headers=HEADERS )
+ 
+        return req.json()

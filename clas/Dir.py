@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 
-from base import POSTGRESS_DB, t_dirs
+from conf import MIAC_API_URL, TOKEN
+import requests
 
 class Dir(BaseModel):
     d_id        : int
@@ -10,24 +11,25 @@ class Dir(BaseModel):
     working     : bool
 
 
-    async def get(NAME) -> str:
+    async def get(NAME, USER_ID) -> str:
         "Получить директорию по имени"
-        query = t_dirs.select(t_dirs.c.d_name == NAME)
-        res = await POSTGRESS_DB.fetch_one(query)
+        HEADERS = dict(
+                KEY = TOKEN,
+                UID = USER_ID
+                )
+        URL = MIAC_API_URL + '/get_dir'
 
-        if not res is None and res['working']:
-            return res['directory']
-        else:
-            return ''
+        req = requests.get(URL, headers=HEADERS, json = NAME)
+        
+        return req.json()
 
     async def add(self):
         "Добавляем новую директорию"
-        query = t_dirs.select(t_dirs.c.d_id == self.d_id)
-        res = await POSTGRESS_DB.fetch_one(query)
+        HEADERS = dict(
+                KEY = TOKEN,
+                UID = USER_ID
+                )
+        URL = MIAC_API_URL + '/add_dir'
+        BODY = self.__dict__
 
-        if not res is None:
-            query = t_dirs.delete(t_dirs.c.d_id == self.d_id)
-            await POSTGRESS_DB.execute(query)
-
-        query = t_dirs.insert().values(self.__dict__)
-        await POSTGRESS_DB.execute(query)
+        requests.post(URL, headers=HEADERS, json = BODY)
