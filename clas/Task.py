@@ -2,16 +2,9 @@ from pydantic import BaseModel, Field
 from typing import Optional
 from datetime import datetime
 from uuid import uuid4, UUID
-from sqlalchemy import and_
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
-import warnings
-warnings.filterwarnings("ignore")
 
-from base import POSTGRESS_DB, t_tasks
-from func import functions
-
-class my_except(Exception):
-    pass
+from conf import MIAC_API_URL, TOKEN
+import requests
 
 class Task(BaseModel):
     t_id        : UUID = Field(default_factory=uuid4)
@@ -26,89 +19,71 @@ class Task(BaseModel):
     time_stop   : Optional[datetime]
     comment     : Optional[str]
 
-
-    async def add(self):
+    def add(self):
         """Создание нового задания
             Нужно проверить, есть ли в пуле 
             выполняющиеся такое задание"""
+        HEADERS = dict(
+            KEY = TOKEN,
+            UID = str(self.client),
+                )
+        BODY = self.__dict__
+        URL = MIAC_API_URL + '/add_task'
+        req = requests.post(URL, headers=HEADERS, json=BODY)
 
-        query = t_tasks.select(and_(
-            t_tasks.c.time_stop == None,
-            t_tasks.c.c_id == self.c_id
-            ))
-        res = await POSTGRESS_DB.fetch_one(query)
-
-        if not res is None:
-            if str(self.client) not in res['users_list']: 
-                query = t_tasks.update()\
-                        .where(t_tasks.c.t_id == res['t_id'])\
-                        .values(users_list = res['users_list'] + ',' + str(self.client))
-                await POSTGRESS_DB.execute(query)
-                return False
-        else:
-            query = t_tasks.insert().values(self.__dict__)
-            await POSTGRESS_DB.execute(query)
-            
-            #query = t_tasks.update()\
-            #        .where(t_tasks.c.t_id == self.t_id)\
-            #        .values(time_start = datetime.now())
-        
-            #await POSTGRESS_DB.execute(query)
-
-            return True
-
-    async def start(self):
+    def start(self):
         """Начать выполнение задачи"""
-        # Запускаем новый тред с процедурой
-        if self.c_arg == 'no':
-            FUNC = functions[self.c_func]()
-        else:
-            FUNC = functions[self.c_func](self.c_arg)
+        HEADERS = dict(
+            KEY = TOKEN
+                )
+        BODY = self.__dict__
+        URL = MIAC_API_URL + '/start_task'
+        req = requests.post(URL, headers=HEADERS, json=BODY)
 
-        try:
-            RES = await FUNC
-        except Exception as e:
-            raise my_except(str(e))
-        else:
-            return RES
-
-
-    async def get():
+    def get():
         """Взять доступную задачу"""
-        query = t_tasks.select(t_tasks.c.time_start == None)\
-                .order_by(t_tasks.c.time_create)
+        HEADERS = dict(
+            KEY = TOKEN
+                )
+        URL = MIAC_API_URL + '/get_task'
+        req = requests.get(URL, headers=HEADERS)
+        return req.json()
 
-        res = await POSTGRESS_DB.fetch_one(query)
-        
-        if not res is None:
-            query = t_tasks.update()\
-                    .where(t_tasks.c.t_id == res['t_id'])\
-                    .values(time_start = datetime.now())
-            await POSTGRESS_DB.execute(query)
-            return Task(**res)
+    def get_all_tasks(USER_ID):
+        """Взять доступную задачу"""
+        HEADERS = dict(
+            KEY = TOKEN,
+            UID = str(USER_ID)
+                )
+        URL = MIAC_API_URL + '/get_all_tasks'
+        req = requests.get(URL, headers=HEADERS)
+        return req.json()
 
-    async def restart():
+    def restart():
         """Рестартануть выполнение задач, если бот перезапустился"""
-        query = t_tasks.update()\
-                .where(t_tasks.c.time_stop == None)\
-                .values(time_start = None )
-        
-        await POSTGRESS_DB.execute(query)
-
-    async def stop(self):
+        HEADERS = dict(
+            KEY = TOKEN
+                )
+        URL = MIAC_API_URL + '/restart_tasks'
+        req = requests.get(URL, headers=HEADERS)
+ 
+    def stop(self):
         """Закончить задачу"""
-        query =  t_tasks.update()\
-                .where(t_tasks.c.t_id == self.t_id)\
-                .values(time_stop = datetime.now(),
-                        comment = self.comment)
-        await POSTGRESS_DB.execute(query)
+        HEADERS = dict(
+            KEY = TOKEN
+                )
+        BODY = self.__dict__
+        URL = MIAC_API_URL + '/stop_task'
+        req = requests.post(URL, headers=HEADERS, json=BODY)
 
-    async def users(self):
+    def users(self):
         """Получить список юзеров для рассылки"""
-        query = t_tasks.select(t_tasks.c.t_id == self.t_id)
-
-        res = await POSTGRESS_DB.fetch_one(query)
+        HEADERS = dict(
+            KEY = TOKEN
+                )
+        BODY = self.__dict__
+        URL = MIAC_API_URL + '/get_task_users_list'
+        req = requests.get(URL, headers=HEADERS, json=BODY)
         
-        if not res is None:
-            list_ = [ int(x) for x in res["users_list"].split(',') ]
-            return list_
+        return req.json()
+

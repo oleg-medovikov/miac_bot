@@ -6,8 +6,6 @@ from base import POSTGRESS_DB
 import asyncio
 
 async def on_startup(dp):
-    await POSTGRESS_DB.connect()
-    await Task.restart()
     await set_default_commands(dp)
     while True:
         try:

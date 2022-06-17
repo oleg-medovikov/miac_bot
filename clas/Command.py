@@ -2,10 +2,8 @@ from datetime import date
 from uuid import uuid4, UUID
 from pydantic import BaseModel, Field
 
-
-
-from base import POSTGRESS_DB, t_commands
-from func import *
+from conf import MIAC_API_URL, TOKEN
+import requests 
 
 class Command(BaseModel):
     c_id : int
@@ -16,30 +14,36 @@ class Command(BaseModel):
     return_file : bool
     asc_day : bool
 
-    async def add(self):
+    def add(self, USER_ID):
         "добавление новой команды"
-        query = t_commands.select(t_commands.c.c_id == self.c_id)
-
-        res = await POSTGRESS_DB.fetch_one(query)
+        HEADERS = dict(
+                KEY=TOKEN,
+                UID=str(USER_ID) )
+        BODY = self.__dict__
+        URL = MIAC_API_URL + '/add_command'
+        req  = requests.post(URL,headers=HEADERS, json = BODY)
         
-        if not res is None:
-            query = t_commands.delete(t_commands.c.c_id == self.c_id)
-            await POSTGRESS_DB.execute(query)
-        
-        query = t_commands.insert().values(self.__dict__)
+        return req.json()
 
-        await POSTGRESS_DB.execute(query)
+    def get_all(USER_ID):
+        "Получение всех комманд"
+        HEADERS = dict(
+                KEY=TOKEN,
+                UID=str(USER_ID) )
+        URL = MIAC_API_URL + '/all_commands'
+        req  = requests.get(URL,headers=HEADERS)
+        return req.json()
 
-    async def read():
-        "Чтение всех комманд"
-        query = t_commands.select().order_by(t_commands.c.c_id)
-        
-        return await POSTGRESS_DB.fetch_all(query)
-    
-    async def get(C_ID):
+    def get(USER_ID,C_ID):
         "Получение команды по айдишнику"
-        query = t_commands.select(t_commands.c.c_id == int(C_ID))
-        res = await POSTGRESS_DB.fetch_one(query)
-         
-        return Command(**res)
+         HEADERS = dict(
+                KEY=TOKEN,
+                UID=str(USER_ID),
+                CID=str(C_ID) )
+
+        URL = MIAC_API_URL + '/get_command'
+        req  = requests.get(URL,headers=HEADERS)
         
+        if not req.json() is None:
+            return Command(**req.json())
+

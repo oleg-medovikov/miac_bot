@@ -11,11 +11,10 @@ class Dir(BaseModel):
     working     : bool
 
 
-    async def get(NAME, USER_ID) -> str:
+    def get( NAME ) -> str:
         "Получить директорию по имени"
         HEADERS = dict(
                 KEY = TOKEN,
-                UID = USER_ID
                 )
         URL = MIAC_API_URL + '/get_dir'
 
@@ -23,11 +22,11 @@ class Dir(BaseModel):
         
         return req.json()
 
-    async def add(self):
+    def add(self, USER_ID ):
         "Добавляем новую директорию"
         HEADERS = dict(
                 KEY = TOKEN,
-                UID = USER_ID
+                UID = str(USER_ID)
                 )
         URL = MIAC_API_URL + '/add_dir'
         BODY = self.__dict__

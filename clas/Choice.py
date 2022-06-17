@@ -7,7 +7,7 @@ class Choice(BaseModel):
     u_id : int
     c_id : int
 
-    async def add(self):
+    def add(self):
         """Добавляем новый выбор пользователя"""
 
         HEADERS = dict(
@@ -22,7 +22,7 @@ class Choice(BaseModel):
 
 
 
-    async def delete(self):
+    def delete(self):
         """Удалить выбор пользователя"""
         HEADERS = dict(
                 KEY = TOKEN,
@@ -35,7 +35,7 @@ class Choice(BaseModel):
 
    
 
-    async def get(U_ID):
+    def get(U_ID):
         """Получить выбор пользователя"""
         HEADERS = dict(
                 KEY = TOKEN,

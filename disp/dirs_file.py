@@ -22,19 +22,18 @@ class IsDirsFile(BoundFilter):
                 )
         if not message['document']['file_name'] == 'Dirs.xlsx':
             return False
-        if not await USER.admin():
+        if not USER.admin():
             await message.delete()
             return False
         return True
 
-
 dp.filters_factory.bind(IsDirsFile)
-
 
 @dp.message_handler(is_dirs_file=True, content_types=['document'])
 async def update_dirs(message):
+    U_ID = message['from']['id']
     FILE = message['document']
-     
+    
     DESTINATION = 'temp/' + FILE.file_unique_id + '.xlsx'
     await bot.download_file_by_id(
                 file_id = FILE.file_id,
@@ -68,9 +67,7 @@ async def update_dirs(message):
 
     df = df.astype(TYPES)
  
-    
     # на уникальность d_id d_name
-
     if any(df['d_id'].duplicated()):
         MESS = "Повторяющиеся d_id: \n" \
                 + str(df.loc[df['d_id'].duplicated(), 'd_id' ]) 
@@ -84,10 +81,10 @@ async def update_dirs(message):
         return await message.answer(MESS)
 
 
-
+    # Добавляем директории по одной
     for row in df.to_dict('records'):
         DIR = Dir(**row)
-        await DIR.add()
+        DIR.add( U_ID )
 
     return await message.answer("Директории обновлены")
 

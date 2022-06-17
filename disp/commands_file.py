@@ -22,7 +22,7 @@ class IsCommandsFile(BoundFilter):
                 )
         if not message['document']['file_name'] == 'Commands.xlsx':
             return False
-        if not await USER.admin():
+        if not USER.admin():
             await message.delete()
             return False
         return True
@@ -30,9 +30,9 @@ class IsCommandsFile(BoundFilter):
 
 dp.filters_factory.bind(IsCommandsFile)
 
-
 @dp.message_handler(is_commands_file=True, content_types=['document'])
 async def update_commands(message):
+    U_ID = message['from']['id']
     FILE = message['document']
 
     DESTINATION = 'temp/' + FILE.file_unique_id + '.xlsx'
@@ -43,7 +43,10 @@ async def update_commands(message):
     
     await message.delete()
 
-    COLUMNS = ['c_id','c_category','c_name','c_procedure','c_arg','return_file','asc_day']
+    COLUMNS = ['c_id','c_category','c_name',
+               'c_procedure','c_arg',
+               'return_file','asc_day']
+
     TYPES = dict(
             c_id = int,
             c_category = str,
@@ -71,9 +74,7 @@ async def update_commands(message):
 
     df = df.astype(TYPES)
  
-    
     # на уникальность c_id
-
     if any(df['c_id'].duplicated()):
         MESS = "Повторяющиеся c_id: \n" \
                 + str(df.loc[df['c_id'].duplicated(), 'c_id' ]) 
@@ -81,19 +82,15 @@ async def update_commands(message):
         return await message.answer(MESS)
 
     # проверка на False True
-
     if df['return_file'].dtype != bool:
         MESS = "В колонке return_file есть неправильные значения!"
 
         return await message.answer(MESS)
 
+    # Добавляем команды по одной 
     for row in df.to_dict('records'):
         COMMAND = Command(**row)
-        await COMMAND.add()
+        COMMAND.add( U_ID )
 
     return await message.answer("Команды обновлены")
-
-
-
-    
 

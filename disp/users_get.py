@@ -2,14 +2,15 @@ from .dispetcher import dp
 from aiogram import types
 
 from func import write_styling_excel_file
-from base import POSTGRESS_EN
-
+from clas import User
 import pandas as pd
 import os
 
 @dp.message_handler(is_admin=True, commands=['users'])
 async def get_users(message: types.Message):
-    df = pd.read_sql("select * from users order by u_id", POSTGRESS_EN )
+    U_ID = message['from']['id']
+
+    df = pd.read_sql( User.get_all( U_ID ))
 
     FILENAME = 'temp/Users.xlsx'
     SHETNAME = 'Users'
@@ -19,5 +20,4 @@ async def get_users(message: types.Message):
     await message.delete()
     await message.answer_document(open(FILENAME, 'rb' ))
     os.remove(FILENAME)
-
 

@@ -2,7 +2,6 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.dispatcher.filters import BoundFilter
 import logging
 
-
 from conf import TELEGRAM_API
 from clas import User 
 
@@ -27,8 +26,8 @@ class IsKnown(BoundFilter):
                 username = message['from']['username'],
                 groups = '', fio ='', description = '',
                 )
-        if not await USER.check():
-            await USER.add_people() 
+        if not USER.check():
+            #USER.add_people() 
             try:
                 await message.delete()
             except:
@@ -52,7 +51,7 @@ class IsAdmin(BoundFilter):
                 username = message['from']['username'],
                 groups = '', fio ='', description = '',
                 )
-        if not await USER.admin():
+        if not USER.admin():
             await message.delete()
             return False
         else:

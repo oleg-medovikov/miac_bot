@@ -23,16 +23,16 @@ class IsUsersFile(BoundFilter):
                 )
         if not message['document']['file_name'] == 'Users.xlsx':
             return False
-        if not await USER.admin():
+        if not USER.admin():
             await message.delete()
             return False
         return True
-
 
 dp.filters_factory.bind(IsUsersFile)
 
 @dp.message_handler(is_users_file=True, content_types=['document'])
 async def update_users(message):
+    U_ID = message['from']['id']
     FILE = message['document']
     
     DESTINATION = 'temp/' + FILE.file_unique_id + '.xlsx'
@@ -43,7 +43,8 @@ async def update_users(message):
     
     await message.delete()
 
-    COLUMNS = ['u_id','first_name','last_name','username','groups','fio','description']
+    COLUMNS = ['u_id','first_name','last_name',
+               'username','groups','fio','description']
     TYPES = dict(
             u_id = int,
             first_name = str,
@@ -71,19 +72,17 @@ async def update_users(message):
 
     df = df.astype(TYPES)
  
-    
     # на уникальность c_id
-
     if any(df['u_id'].duplicated()):
         MESS = "Повторяющиеся u_id: \n" \
                 + str(df.loc[df['u_id'].duplicated(), 'u_id' ]) 
         
         return await message.answer(MESS)
 
-
+    # добавляем пользователей по одному
     for row in df.to_dict('records'):
         USER = User(**row)
-        await USER.add()
+        USER.add( U_ID )
 
     return await message.answer("Пользователи обновлены")
 

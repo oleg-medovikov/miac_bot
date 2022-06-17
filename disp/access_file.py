@@ -22,7 +22,7 @@ class IsAccessFile(BoundFilter):
                 )
         if not message['document']['file_name'] == 'Access.xlsx':
             return False
-        if not await USER.admin():
+        if not USER.admin():
             await message.delete()
             return False
         return True
@@ -34,8 +34,9 @@ dp.filters_factory.bind(IsAccessFile)
 @dp.message_handler(is_access_file=True, content_types=['document'])
 async def update_access(message):
     FILE = message['document']
-
+    U_ID = message['from']['id']
     DESTINATION = 'temp/' + FILE.file_unique_id + '.xlsx'
+    
     await bot.download_file_by_id(
                 file_id = FILE.file_id,
                 destination = DESTINATION
@@ -67,11 +68,13 @@ async def update_access(message):
         return await message.answer(MESS)
 
     df = df.astype(TYPES)
+    
+    # удаляем полностью все допуски
+    Access.delete_all(U_ID)
 
-    await Access.delete_all()
-
+    # добавляем обратно построчно
     for row in df.to_dict('records'):
         ACCESS = Access(**row)
-        await ACCESS.add()
+        ACCESS.add(U_ID)
 
     return await message.answer("Допуски обновлены")
