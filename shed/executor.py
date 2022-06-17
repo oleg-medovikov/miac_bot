@@ -6,26 +6,27 @@ import os, warnings
 warnings.filterwarnings("ignore")
 
 async def executor():
-    TASK = await Task.get()
+    TASK = Task.get()
     if TASK is None:
         return 1
-    
-    COMMAND = await Command.get(TASK.c_id)
+
+    COMMAND = Command.get(TASK.c_id)
+
 
     try:
         return_value = await TASK.start()
     except Exception as e:
         # если функция сломалась
         TASK.comment = str(e)
-        await TASK.stop()
+        TASK.stop()
         return await bot.send_message(
                         TASK.client,
                         text=str(e),
                         parse_mode='html')
     else:
         #Если все хорошо, то получаем список, кому вернуть результат
-        USERS = await TASK.users()
-        await TASK.stop()
+        USERS = TASK.users()
+        TASK.stop()
         #Возвращаем результат
             
         if COMMAND.return_file:

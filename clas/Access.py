@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field
 
 from conf import MIAC_API_URL, TOKEN
+import requests
 
 class Access(BaseModel):
     u_id : int

@@ -34,11 +34,10 @@ class Command(BaseModel):
         req  = requests.get(URL,headers=HEADERS)
         return req.json()
 
-    def get(USER_ID,C_ID):
+    def get( C_ID ):
         "Получение команды по айдишнику"
-         HEADERS = dict(
+        HEADERS = dict(
                 KEY=TOKEN,
-                UID=str(USER_ID),
                 CID=str(C_ID) )
 
         URL = MIAC_API_URL + '/get_command'

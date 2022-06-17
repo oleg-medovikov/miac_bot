@@ -19,7 +19,6 @@ async def send_welcome(message: types.Message):
         pass
 
     res = USER.access()
-    
     if len(res):
 
         Choice = types.InlineKeyboardMarkup(
@@ -28,15 +27,15 @@ async def send_welcome(message: types.Message):
                 )
 
         for com in res: 
-            if com.asc_day:
+            if com['asc_day']:
                 ACTION = 'Ask day'
             else:
                 ACTION = 'No ask day'
 
             Choice.insert(types.KeyboardButton(
-                text = com.c_name,
+                text = com['c_name'],
                 callback_data = command.new(
-                    id = com.c_id,
+                    id = com['c_id'],
                     action = ACTION )  ))
         
         await message.answer(
@@ -59,7 +58,7 @@ async def standart_command_handler(
     
     U_ID = query['from']['id']
     
-    COMMAND = Command.get(U_ID, callback_data['id'])
+    COMMAND = Command.get( callback_data['id'] )
 
     if COMMAND.asc_day:
         # Если нужно спросить день, посылаем календарь
@@ -73,7 +72,7 @@ async def standart_command_handler(
         
     else:
         TASK = Task(
-                t_id = uuid.uuid4(),
+                #t_id = str(uuid.uuid4()),
                 time_create = datetime.datetime.now(),
                 client = int(U_ID),
                 task_type = 'Command',
@@ -87,7 +86,6 @@ async def standart_command_handler(
                 )
 
         res = TASK.add()
-        
         await query.answer(res['mess'], show_alert=False)
         
         try:
@@ -108,10 +106,10 @@ async def process_simple_calendar(
     if selected:
         U_ID    = callback_query['from']['id']
         C_ID    = Choice.get(U_ID)
-        COMMAND = Command.get(U_ID,C_ID)
+        COMMAND = Command.get( C_ID ) 
 
         TASK = Task(
-                t_id = uuid.uuid4(),
+                #t_id = str(uuid.uuid4()),
                 time_create = datetime.datetime.now(),
                 client = int(U_ID),
                 task_type = 'Command',
@@ -126,7 +124,7 @@ async def process_simple_calendar(
     
     await callback_query.message.answer(f'Для команды "{COMMAND.c_name}" выбрана дата {date.strftime("%d.%m.%Y")}' )
 
-    res = TASK.add():
+    res = TASK.add()
 
     await query.answer(res['mess'], show_alert=False)
     try:

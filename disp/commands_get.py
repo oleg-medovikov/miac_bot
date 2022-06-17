@@ -3,6 +3,7 @@ from aiogram import types
 
 from func import write_styling_excel_file
 
+from clas import Command
 import pandas as pd
 import os
 

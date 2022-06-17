@@ -26,7 +26,7 @@ class User(BaseModel):
 
         req = requests.post(URL, headers=HEADERS, json=BODY )
   
-    def get_by_id(U_ID):
+    def get_by_id( USER_ID ):
         "Взять пользователя по id"
         HEADERS = dict(
                 KEY = TOKEN,

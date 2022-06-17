@@ -10,7 +10,7 @@ import os
 @dp.message_handler(is_know=True, commands=['tasks', 'задачи'])
 async def get_tasks(message: types.Message):
     U_ID = message['from']['id']
-    df = pd.read_sql( Task.get_all_tasks( U_ID ) )
+    df = pd.DataFrame( Task.get_all_tasks( U_ID ) )
 
     FILENAME = 'temp/Tasks.xlsx'
     SHETNAME = 'tasks'

@@ -4,6 +4,7 @@ from datetime import datetime
 from uuid import uuid4, UUID
 
 from conf import MIAC_API_URL, TOKEN
+from func import functions
 import requests
 
 class Task(BaseModel):
@@ -28,17 +29,28 @@ class Task(BaseModel):
             UID = str(self.client),
                 )
         BODY = self.__dict__
+        BODY['t_id'] = BODY['t_id'].hex
+        BODY['time_create'] = BODY['time_create'].isoformat()
+
         URL = MIAC_API_URL + '/add_task'
         req = requests.post(URL, headers=HEADERS, json=BODY)
+        return req.json()
 
-    def start(self):
+    async def start(self):
         """Начать выполнение задачи"""
-        HEADERS = dict(
-            KEY = TOKEN
-                )
-        BODY = self.__dict__
-        URL = MIAC_API_URL + '/start_task'
-        req = requests.post(URL, headers=HEADERS, json=BODY)
+        
+        if self.c_arg == 'no':
+            FUNC = functions[self.c_func]()
+        else:
+            FUNC = functions[self.c_func](self.c_arg)
+
+        try:
+            RES = await FUNC
+        except Exception as e:
+            raise my_except(str(e))
+        else:
+            return RES
+
 
     def get():
         """Взять доступную задачу"""
@@ -47,7 +59,10 @@ class Task(BaseModel):
                 )
         URL = MIAC_API_URL + '/get_task'
         req = requests.get(URL, headers=HEADERS)
-        return req.json()
+        
+        if not req.json() is None:
+            #print(req.json() )
+            return Task(**req.json())
 
     def get_all_tasks(USER_ID):
         """Взять доступную задачу"""
@@ -65,7 +80,7 @@ class Task(BaseModel):
             KEY = TOKEN
                 )
         URL = MIAC_API_URL + '/restart_tasks'
-        req = requests.get(URL, headers=HEADERS)
+        req = requests.post(URL, headers=HEADERS)
  
     def stop(self):
         """Закончить задачу"""
@@ -73,6 +88,7 @@ class Task(BaseModel):
             KEY = TOKEN
                 )
         BODY = self.__dict__
+
         URL = MIAC_API_URL + '/stop_task'
         req = requests.post(URL, headers=HEADERS, json=BODY)
 
@@ -82,6 +98,10 @@ class Task(BaseModel):
             KEY = TOKEN
                 )
         BODY = self.__dict__
+        BODY['t_id'] = BODY['t_id'].hex
+        BODY['time_create'] = BODY['time_create'].isoformat()
+        #BODY['time_start']  = BODY['time_start'].isoformat()
+        
         URL = MIAC_API_URL + '/get_task_users_list'
         req = requests.get(URL, headers=HEADERS, json=BODY)
         
