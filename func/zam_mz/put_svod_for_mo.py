@@ -7,7 +7,7 @@ async def put_svod_for_mo(DF,NAME, DATE):
     if DATE is None:
         DATE = datetime.datetime.now().strftime( '%Y-%m-%d' )
 
-    PATH = await Dir.get( 'zam_svod' ) + '/' + NAME
+    PATH = Dir.get( 'zam_svod' ) + '/' + NAME
     NAME = DATE + ' ' + NAME + '.xlsx'
 
     try:

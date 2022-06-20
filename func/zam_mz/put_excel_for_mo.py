@@ -11,7 +11,7 @@ async def put_excel_for_mo(DF,NAME,DATE):
 
     STAT = pd.DataFrame()
     
-    ROOT = await Dir.get('covid')
+    ROOT = Dir.get('covid')
     
     for ORG in DF ['Медицинская организация'].unique():
         
@@ -22,7 +22,7 @@ async def put_excel_for_mo(DF,NAME,DATE):
         PART.fillna(0, inplace = True)
         PART = PART.applymap(str)
         
-        USER = await Dir.get( ORG )
+        USER = Dir.get( ORG )
         
         if USER:
             PATH = ROOT + USER

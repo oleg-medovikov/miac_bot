@@ -13,16 +13,15 @@ COLUMNS = ['exp_test_01_01', 'exp_test_02_01', 'exp_test_03_01', 'exp_test_04_01
 
 
 async def svod_54_covid_19():
-    SQL = open('func/parus/sql/covid_54_svod_new.sql', 'r').read()
+    SQL = open('func/parus/sql/covid_54_svod.sql', 'r').read()
 
     DF = parus_sql(SQL) 
 
 
-    DATE = DF.at[0,'DAY']
+    DATE = datetime.datetime.now().strftime('%d_%m_%Y')
 
-    del DF['DAY']
 
-    NEW_NAME = 'temp/54_COVID_19_'   + DATE.strftime('%d_%m_%Y') + '.xlsx'
+    NEW_NAME = 'temp/54_COVID_19_'   + DATE + '.xlsx'
 
     shutil.copyfile('help/54_COVID_19_new.xlsx', NEW_NAME)
 
@@ -32,7 +31,7 @@ async def svod_54_covid_19():
         # Вытаскиваем кусок данных про конкретную партию
         PART = DF.loc[DF['POKAZATEL'].str.endswith( NOMER )]
 
-        PART = PART.pivot_table(index = 'ORGANIZATION', columns = ['POKAZATEL'],aggfunc='first').stack(0)
+        PART = PART.pivot_table(index = ['ORGANIZATION', 'DAY'], columns = ['POKAZATEL'],aggfunc='first').stack(0)
 
         PART.fillna(0,inplace=True)
 
@@ -42,16 +41,19 @@ async def svod_54_covid_19():
                  PART[COL] = 0
             else:
                 PART[COL] = pd.to_numeric(PART[COL], errors='ignore')
-
-        PART.columns = COLUMNS
         
+        PART.reset_index(inplace=True)
+
+        list_ = list(PART.columns[ 3:12 ])
+        list_.append('DAY')
+        PART = PART[list_]
+
         ws = wb['part ' + NOMER ]
         
         rows = dataframe_to_rows(PART,index=False, header=True)
         for r_idx, row in enumerate(rows,2):
             for c_idx, value in enumerate(row, 2):
                 ws.cell(row=r_idx, column=c_idx, value=value)
-
 
     
     wb.save( NEW_NAME )

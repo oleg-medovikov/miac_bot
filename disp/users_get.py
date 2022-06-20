@@ -10,7 +10,7 @@ import os
 async def get_users(message: types.Message):
     U_ID = message['from']['id']
 
-    df = pd.read_sql( User.get_all( U_ID ))
+    df = pd.DataFrame( User.get_all( U_ID ))
 
     FILENAME = 'temp/Users.xlsx'
     SHETNAME = 'Users'

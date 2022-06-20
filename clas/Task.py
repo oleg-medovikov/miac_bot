@@ -7,6 +7,9 @@ from conf import MIAC_API_URL, TOKEN
 from func import functions
 import requests
 
+class my_except(Exception):
+    pass
+
 class Task(BaseModel):
     t_id        : UUID = Field(default_factory=uuid4)
     time_create : datetime
@@ -89,6 +92,14 @@ class Task(BaseModel):
                 )
         BODY = self.__dict__
 
+        try:
+            BODY['t_id'] = BODY['t_id'].hex
+        except:
+            pass
+        try:
+            BODY['time_create'] = BODY['time_create'].isoformat()
+        except:
+            pass
         URL = MIAC_API_URL + '/stop_task'
         req = requests.post(URL, headers=HEADERS, json=BODY)
 
