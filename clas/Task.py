@@ -4,7 +4,6 @@ from datetime import datetime
 from uuid import uuid4, UUID
 
 from conf import MIAC_API_URL, TOKEN
-from func import functions
 import requests
 
 class my_except(Exception):
@@ -38,22 +37,6 @@ class Task(BaseModel):
         URL = MIAC_API_URL + '/add_task'
         req = requests.post(URL, headers=HEADERS, json=BODY)
         return req.json()
-
-    async def start(self):
-        """Начать выполнение задачи"""
-        
-        if self.c_arg == 'no':
-            FUNC = functions[self.c_func]()
-        else:
-            FUNC = functions[self.c_func](self.c_arg)
-
-        try:
-            RES = await FUNC
-        except Exception as e:
-            raise my_except(str(e))
-        else:
-            return RES
-
 
     def get():
         """Взять доступную задачу"""

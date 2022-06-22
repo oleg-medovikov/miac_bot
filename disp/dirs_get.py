@@ -2,7 +2,6 @@ from .dispetcher import dp
 from aiogram import types
 
 from func import write_styling_excel_file
-from base import POSTGRESS_EN
 
 import pandas as pd
 import os
