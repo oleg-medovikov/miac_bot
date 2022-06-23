@@ -3,12 +3,14 @@ from aiogram import types
 
 from func import write_styling_excel_file
 
+from clas import Dir
 import pandas as pd
 import os
 
 @dp.message_handler(is_know=True, commands=['dirs'])
 async def get_dirs(message: types.Message):
-    df = pd.read_sql("select * from dirs", POSTGRESS_EN )
+    U_ID = message['from']['id']
+    df = pd.DataFrame( data = Dir.get_all_dirs( U_ID ))
 
     FILENAME = 'temp/Dirs.xlsx'
     SHETNAME = 'dirs'

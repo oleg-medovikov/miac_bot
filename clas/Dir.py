@@ -32,3 +32,16 @@ class Dir(BaseModel):
         BODY = self.__dict__
 
         requests.post(URL, headers=HEADERS, json = BODY)
+
+    def get_all_dirs( USER_ID ):
+        "Получить все директории"
+        HEADERS = dict(
+                KEY = TOKEN,
+                UID = str(USER_ID)
+                )
+        URL = MIAC_API_URL + '/get_all_dirs'
+
+        req = requests.get(URL, headers=HEADERS)
+        return req.json()
+
+
