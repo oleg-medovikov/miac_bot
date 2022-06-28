@@ -8,7 +8,7 @@ warnings.filterwarnings("ignore")
 async def main():
     await asyncio.gather(
         on_startup(dp),
-      #  scheduler(),
+        scheduler(),
     )
 
 if __name__ == '__main__':
