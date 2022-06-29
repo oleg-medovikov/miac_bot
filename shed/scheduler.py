@@ -6,7 +6,7 @@ from conf import MASTER
 
 async def scheduler():
     aioschedule.every().day.at('01:00').do( load_fr )
-    aioschedule.every().day.at('02:00').do( load_fr )
+    aioschedule.every().day.at('02:00').do( load_fr_death )
     #aioschedule.every(1).minutes.do(test_send)
     while True:
         await aioschedule.run_pending()
