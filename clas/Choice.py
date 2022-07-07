@@ -39,7 +39,7 @@ class Choice(BaseModel):
         """Получить выбор пользователя"""
         HEADERS = dict(
                 KEY = TOKEN,
-                UID = str(self.u_id)
+                UID = str(U_ID)
                 )
 
         URL = MIAC_API_URL + '/get_user_choice'

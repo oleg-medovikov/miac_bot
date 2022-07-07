@@ -7,6 +7,7 @@ from conf import MASTER
 async def scheduler():
     aioschedule.every().day.at('01:00').do( load_fr )
     aioschedule.every().day.at('02:00').do( load_fr_death )
+    aioschedule.every().day.at('03:00').do( load_umsrs )
     #aioschedule.every(1).minutes.do(test_send)
     while True:
         await aioschedule.run_pending()
@@ -41,3 +42,21 @@ async def load_fr_death():
         comment = None
         )
     TASK.add()
+
+
+async def load_umsrs():
+    TASK = Task(
+        time_create = datetime.datetime.now(),
+        client = MASTER,
+        task_type = 'Sheduler',
+        c_id = 43,
+        c_func = 'load_umsrs',
+        c_arg = 'no',
+        users_list = str(MASTER),
+        time_start = None,
+        time_stop = None,
+        comment = None
+        )
+    TASK.add()
+
+
