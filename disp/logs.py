@@ -12,7 +12,11 @@ async def ask_log(message: types.Message):
     COUNT = 15
 
     U_ID = message['from']['id']
-    df = pd.DataFrame( Task.get_all_tasks( U_ID ) ).head( COUNT )
+    df = pd.DataFrame( Task.get_all_tasks( U_ID ) )
+
+    IGNORE = ['Проверить ФР', 'Статус замечаний']
+
+    df = df.loc[~df['c_name'].isin(IGNORE) ].head( COUNT )
    
     df['time_create'] = pd.to_datetime(df['time_create']).dt.strftime('%H:%M')
     
