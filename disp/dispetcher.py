@@ -70,8 +70,21 @@ class IsAskLog(BoundFilter):
         else:
             return False
 
+class IsZamStat(BoundFilter):
+    key = 'is_zam_stat'
+
+    def __init__(self, is_zam_stat):
+        self.is_zam_stat = is_zam_stat
+
+    async def check(self, message: types.Message):
+        
+        if message['text'] in ( 'zam', 'зам', 'замечания'):
+            return True
+        else:
+            return False
 
 
 dp.filters_factory.bind(IsKnown)
 dp.filters_factory.bind(IsAdmin)
 dp.filters_factory.bind(IsAskLog)
+dp.filters_factory.bind(IsZamStat)
