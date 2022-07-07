@@ -57,6 +57,21 @@ class IsAdmin(BoundFilter):
         else:
             return True
 
+class IsAskLog(BoundFilter):
+    key = 'is_ask_log'
+
+    def __init__(self, is_ask_log):
+        self.is_ask_log = is_ask_log
+
+    async def check(self, message: types.Message):
+        
+        if message['text'] in ( '?', 'log', 'лог'):
+            return True
+        else:
+            return False
+
+
+
 dp.filters_factory.bind(IsKnown)
 dp.filters_factory.bind(IsAdmin)
-
+dp.filters_factory.bind(IsAskLog)

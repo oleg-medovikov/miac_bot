@@ -11,4 +11,4 @@ from .dirs_file     import *
 from .access_get    import *
 from .access_file   import *
 from .tasks_get     import *
-
+from .logs          import *
