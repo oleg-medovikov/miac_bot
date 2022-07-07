@@ -9,7 +9,7 @@ from clas import Task
 
 @dp.message_handler(is_ask_log=True, content_types=['text'] )
 async def ask_log(message: types.Message):
-    COUNT = 15
+    COUNT = 20
 
     U_ID = message['from']['id']
     df = pd.DataFrame( Task.get_all_tasks( U_ID ) )
