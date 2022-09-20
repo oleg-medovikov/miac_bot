@@ -8,7 +8,12 @@ TELEGRAM_API   = config('TELEGRAM_API',   cast=str)
 CHAT_SVALKA_ID = config('chat_svalka_id', cast=int)
 MIAC_API_URL   = config('MIAC_API_URL', cast=str)
 TOKEN          = config('TOKEN', cast=str) 
+
+#=== USERS
 MASTER         = config('MASTER', cast=int)
+SVETLICHNAIA   = config('SVETLICHNAIA', cast=int)
+#====
+
 
 DATABASE_PARUS  = config('DATABASE_PARUS',  cast=str)
 ORACLE_HOME     = config('ORACLE_HOME',     cast=str)
