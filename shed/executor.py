@@ -1,9 +1,11 @@
 from disp import bot
 from clas import Task, Command
 
-import os, warnings
+import os
+import warnings
 
 warnings.filterwarnings("ignore")
+
 
 async def executor():
     TASK = Task.get()
@@ -11,7 +13,6 @@ async def executor():
         return 1
 
     COMMAND = Command.get(TASK.c_id)
-
 
     try:
         return_value = await TASK.start()
@@ -24,11 +25,10 @@ async def executor():
                         text=str(e),
                         parse_mode='html')
     else:
-        #Если все хорошо, то получаем список, кому вернуть результат
+        # Если все хорошо, то получаем список, кому вернуть результат
         USERS = TASK.users()
         TASK.stop()
-        #Возвращаем результат
-            
+        # Возвращаем результат
         if COMMAND.return_file:
             for FILE in return_value.split(';'):
                 for USER in USERS:
@@ -39,4 +39,3 @@ async def executor():
         else:
             for USER in USERS:
                 await bot.send_message(chat_id=USER, text=return_value)
-
