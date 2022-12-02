@@ -12,9 +12,10 @@ async def scheduler():
     aioschedule.every().day.at('05:00').do(load_umsrs)
     aioschedule.every().day.at('06:00').do(send_count_hospitalised)
     aioschedule.every().day.at('21:00').do(send_file_uic)
-    aioschedule.every().day.at('21:01').do(do_svod_death)
+    aioschedule.every().day.at('21:00').do(do_svod_death)
     aioschedule.every().thursday.at('11:00').do(send_otchet_deti)
     aioschedule.every().monday.at('11:00').do(send_otchet_po_ymershim)
+    aioschedule.every().day.at('22:00').do(sbor_zabolevshie_med)
 #   aioschedule.every().day.at('11:25').do( send_compliment )
 #   aioschedule.every(1).minutes.do(test_send)
     while True:
@@ -34,6 +35,22 @@ async def send_compliment():
         'time_start':  None,
         'time_stop':   None,
         'comment':     None
+        })
+    TASK.add()
+
+
+async def sbor_zabolevshie_med():
+    TASK = Task(**{
+        'time_create':  datetime.datetime.now(),
+        'client':       MASTER,
+        'task_type':    'Sheduler',
+        'c_id':         60,
+        'c_func':       'sbor_zabolevshix',
+        'c_arg':        'no',
+        'users_list':   str(MASTER),
+        'time_start':   None,
+        'time_stop':    None,
+        'comment':      None
         })
     TASK.add()
 
