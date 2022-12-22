@@ -3,7 +3,7 @@ import aioschedule
 import datetime
 
 from clas import Task
-from conf import MASTER, SVETLICHNAIA  # , KUZMINA
+from conf import MASTER, SVETLICHNAIA, KLAPKO  # , KUZMINA
 
 
 async def scheduler():
@@ -12,12 +12,13 @@ async def scheduler():
     aioschedule.every().day.at('05:00').do(load_umsrs)
     aioschedule.every().day.at('06:00').do(send_count_hospitalised)
     aioschedule.every().day.at('07:00').do(medical_personal_sick)
+    aioschedule.every().day.at('13:00').do(cardio_load_feed_back_auto)
     aioschedule.every().day.at('21:00').do(send_file_uic)
     aioschedule.every().day.at('21:00').do(do_svod_death)
     aioschedule.every().thursday.at('11:00').do(send_otchet_deti)
     aioschedule.every().monday.at('10:00').do(send_otchet_po_ymershim)
     aioschedule.every().day.at('22:00').do(sbor_zabolevshie_med)
-#    aioschedule.every().monday.at('12:00').do(send_compliment)
+#   aioschedule.every().monday.at('12:00').do(send_compliment)
 #   aioschedule.every(1).minutes.do(test_send)
     while True:
         await aioschedule.run_pending()
@@ -36,6 +37,22 @@ async def send_compliment():
         'time_start':  None,
         'time_stop':   None,
         'comment':     None
+        })
+    TASK.add()
+
+
+async def cardio_load_feed_back_auto():
+    TASK = Task(**{
+        'time_create':  datetime.datetime.now(),
+        'client':       KLAPKO,
+        'task_type':    'Sheduler',
+        'c_id':         69,
+        'c_func':       'load_feed_back_auto',
+        'c_arg':        'no',
+        'users_list':   str(KLAPKO),
+        'time_start':   None,
+        'time_stop':    None,
+        'comment':      None
         })
     TASK.add()
 
