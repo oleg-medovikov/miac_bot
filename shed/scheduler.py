@@ -12,7 +12,9 @@ async def scheduler():
     aioschedule.every().day.at('05:00').do(load_umsrs)
     aioschedule.every().day.at('06:00').do(send_count_hospitalised)
     aioschedule.every().day.at('07:00').do(medical_personal_sick)
+    aioschedule.every().day.at('09:00').do(regiz_decomposition_moning)
     aioschedule.every().day.at('13:00').do(cardio_load_feed_back_auto)
+    aioschedule.every().day.at('16:05').do(regiz_load_to_base_auto)
     aioschedule.every().day.at('21:00').do(send_file_uic)
     aioschedule.every().day.at('21:00').do(do_svod_death)
     aioschedule.every().thursday.at('11:00').do(send_otchet_deti)
@@ -37,6 +39,38 @@ async def send_compliment():
         'time_start':  None,
         'time_stop':   None,
         'comment':     None
+        })
+    TASK.add()
+
+
+async def regiz_decomposition_moning():
+    TASK = Task(**{
+        'time_create':  datetime.datetime.now(),
+        'client':       MASTER,
+        'task_type':    'Sheduler',
+        'c_id':         71,
+        'c_func':       'regiz_decomposition',
+        'c_arg':        'no',
+        'users_list':   str(MASTER),
+        'time_start':   None,
+        'time_stop':    None,
+        'comment':      None
+        })
+    TASK.add()
+
+
+async def regiz_load_to_base_auto():
+    TASK = Task(**{
+        'time_create':  datetime.datetime.now(),
+        'client':       MASTER,
+        'task_type':    'Sheduler',
+        'c_id':         72,
+        'c_func':       'regiz_load_to_base',
+        'c_arg':        'no',
+        'users_list':   str(MASTER),
+        'time_start':   None,
+        'time_stop':    None,
+        'comment':      None
         })
     TASK.add()
 
