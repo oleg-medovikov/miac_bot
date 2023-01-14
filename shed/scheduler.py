@@ -12,7 +12,7 @@ async def scheduler():
     aioschedule.every().day.at('05:00').do(load_umsrs)
     aioschedule.every().day.at('06:00').do(send_count_hospitalised)
     aioschedule.every().day.at('07:00').do(medical_personal_sick)
-    aioschedule.every().day.at('09:00').do(regiz_decomposition_moning)
+    aioschedule.every().day.at('07:05').do(regiz_decomposition_moning)
     aioschedule.every().day.at('13:00').do(cardio_load_feed_back_auto)
     aioschedule.every().day.at('16:05').do(regiz_load_to_base_auto)
     aioschedule.every().day.at('21:00').do(send_file_uic)
