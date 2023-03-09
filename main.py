@@ -1,9 +1,10 @@
 from disp import dp, on_startup
-from aiogram import executor
 from shed import scheduler
-import warnings, asyncio
+import warnings
+import asyncio
 
 warnings.filterwarnings("ignore")
+
 
 async def main():
     await asyncio.gather(
@@ -13,4 +14,3 @@ async def main():
 
 if __name__ == '__main__':
     asyncio.run(main())
-
