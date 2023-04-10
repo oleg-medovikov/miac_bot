@@ -65,7 +65,10 @@ async def standart_command_handler(
         await bot.send_message(
                 U_ID,
                 text="Выбор даты:",
-                reply_markup=await SimpleCalendar().start_calendar())
+                reply_markup=await SimpleCalendar().start_calendar(
+                    datetime.now().year,
+                    datetime.now().month
+                    ))
 
     else:
         TASK = Task(
