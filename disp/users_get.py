@@ -11,7 +11,7 @@ import os
 async def get_users(message: types.Message):
     U_ID = message['from']['id']
 
-    df = pd.DataFrame(User.get_all(U_ID))
+    df = pd.DataFrame(await User.get_all())
 
     FILENAME = 'temp/Users.xlsx'
     SHETNAME = 'Users'
@@ -21,4 +21,3 @@ async def get_users(message: types.Message):
     await delete_message(message)
     await message.answer_document(open(FILENAME, 'rb'))
     os.remove(FILENAME)
-

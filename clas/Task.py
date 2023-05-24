@@ -4,23 +4,26 @@ from datetime import datetime
 from uuid import uuid4, UUID
 
 from conf import MIAC_API_URL, TOKEN
+from base import t_tasks, BASE
 import requests
+
 
 class my_except(Exception):
     pass
 
+
 class Task(BaseModel):
-    t_id        : UUID = Field(default_factory=uuid4)
-    time_create : datetime
-    client      : int
-    task_type   : str
-    c_id        : int
-    c_func      : str
-    c_arg       : str
-    users_list  : str
-    time_start  : Optional[datetime]
-    time_stop   : Optional[datetime]
-    comment     : Optional[str]
+    t_id:         UUID = Field(default_factory=uuid4)
+    time_create:  datetime
+    client:       int
+    task_type:    str
+    c_id:         int
+    c_func:       str
+    c_arg:        str
+    users_list:   str
+    time_start:   Optional[datetime]
+    time_stop:    Optional[datetime]
+    comment:      Optional[str]
 
     def add(self):
         """Создание нового задания
@@ -50,15 +53,13 @@ class Task(BaseModel):
             #print(req.json() )
             return Task(**req.json())
 
-    def get_all_tasks(USER_ID):
+    async def get_all_tasks():
         """Взять доступную задачу"""
-        HEADERS = dict(
-            KEY = TOKEN,
-            UID = str(USER_ID)
-                )
-        URL = MIAC_API_URL + '/get_all_tasks'
-        req = requests.get(URL, headers=HEADERS)
-        return req.json()
+        query = t_tasks.select().order_by(t_tasks.c.time_create)
+        list_ = []
+        for row in await BASE.fetch_all(query):
+            list_.append(Task(**row).dict())
+        return list_
 
     def restart():
         """Рестартануть выполнение задач, если бот перезапустился"""
@@ -67,7 +68,7 @@ class Task(BaseModel):
                 )
         URL = MIAC_API_URL + '/restart_tasks'
         req = requests.post(URL, headers=HEADERS)
- 
+
     def stop(self):
         """Закончить задачу"""
         HEADERS = dict(

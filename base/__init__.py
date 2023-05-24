@@ -1,4 +1,4 @@
-from .base import metadata, POSTGRESS_DB, POSTGRESS_EN
+from .base import metadata, BASE, POSTGRESS_EN
 
 # Таблицы обеспечивающие работу бота
 from .users import t_users
@@ -13,7 +13,7 @@ metadata.create_all(POSTGRESS_EN)
 
 __all__ = [
     'metadata',
-    'POSTGRESS_DB',
+    'BASE',
     'POSTGRESS_EN',
     't_users',
     't_people',
