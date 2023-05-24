@@ -4,7 +4,7 @@ from aiogram.utils.callback_data import CallbackData
 from datetime import datetime
 from aiogram_calendar import simple_cal_callback, SimpleCalendar
 
-from func import hello_message
+from func import hello_message, delete_message
 from clas import User, Command, Task, Choice
 
 command = CallbackData('post', 'id', 'action')
@@ -12,12 +12,8 @@ command = CallbackData('post', 'id', 'action')
 
 @dp.message_handler(is_know=True, commands=['start', 'старт'])
 async def send_welcome(message: types.Message):
+    await delete_message(message)
     USER = User.get_by_id(message['from']['id'])
-
-    try:
-        await message.delete()
-    except:
-        pass
 
     res = USER.access()
     if len(res):
@@ -88,10 +84,7 @@ async def standart_command_handler(
         res = TASK.add()
         await query.answer(res['mess'], show_alert=False)
 
-        try:
-            await query.message.delete()
-        except:
-            pass
+        await delete_message(query.message)
 
 
 @dp.callback_query_handler(simple_cal_callback.filter())

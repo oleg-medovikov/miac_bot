@@ -2,9 +2,10 @@ from .dispetcher import dp, bot
 from aiogram import types
 import pandas as pd, os
 from clas import User
-
+from func import delete_message
 
 from aiogram.dispatcher.filters import BoundFilter
+
 
 class IsUsersFile(BoundFilter):
     key = 'is_users_file'
@@ -15,44 +16,48 @@ class IsUsersFile(BoundFilter):
     async def check(self, message: types.Message):
 
         USER = User(
-                u_id = message['from']['id'],
-                first_name = message['from']['first_name'],
-                last_name = message['from']['last_name'],
-                username = message['from']['username'],
-                groups = '', fio ='', description = '',
+                u_id=message['from']['id'],
+                first_name=message['from']['first_name'],
+                last_name=message['from']['last_name'],
+                username=message['from']['username'],
+                groups='', fio='', description='',
                 )
         if not message['document']['file_name'] == 'Users.xlsx':
             return False
         if not USER.admin():
-            await message.delete()
+            await delete_message(message)
             return False
         return True
 
+
 dp.filters_factory.bind(IsUsersFile)
+
 
 @dp.message_handler(is_users_file=True, content_types=['document'])
 async def update_users(message):
     U_ID = message['from']['id']
     FILE = message['document']
-    
+
     DESTINATION = 'temp/' + FILE.file_unique_id + '.xlsx'
     await bot.download_file_by_id(
-                file_id = FILE.file_id,
-                destination = DESTINATION
+                file_id=FILE.file_id,
+                destination=DESTINATION
                 )
-    
-    await message.delete()
 
-    COLUMNS = ['u_id','first_name','last_name',
-               'username','groups','fio','description']
+    await delete_message(message)
+
+    COLUMNS = [
+        'u_id', 'first_name', 'last_name',
+        'username', 'groups', 'fio', 'description'
+    ]
     TYPES = dict(
-            u_id = int,
-            first_name = str,
-            last_name = str,
-            username = str,
-            groups = str,
-            fio = str,
-            description = str
+            u_id=int,
+            first_name=str,
+            last_name=str,
+            username=str,
+            groups=str,
+            fio=str,
+            description=str
             )
 
     try:
@@ -60,30 +65,27 @@ async def update_users(message):
     except Exception as e:
         os.remove(DESTINATION)
         return await message.answer(str(e))
-    
-   
-    ## Проверки файла на всякое
+
+    # Проверки файла на всякое
     # на наличие пустых ячеек
-    if any(df.loc[df.isnull().to_numpy(),'u_id'] ):
+    if any(df.loc[df.isnull().to_numpy(), 'u_id']):
         MESS = "Есть пустые ячейки! \n" \
-                + str(df.loc[df.isnull().to_numpy(),'u_id'].unique())
+                + str(df.loc[df.isnull().to_numpy(), 'u_id'].unique())
 
         return await message.answer(MESS)
 
     df = df.astype(TYPES)
- 
+
     # на уникальность c_id
     if any(df['u_id'].duplicated()):
         MESS = "Повторяющиеся u_id: \n" \
-                + str(df.loc[df['u_id'].duplicated(), 'u_id' ]) 
-        
+                + str(df.loc[df['u_id'].duplicated(), 'u_id'])
+
         return await message.answer(MESS)
 
     # добавляем пользователей по одному
     for row in df.to_dict('records'):
         USER = User(**row)
-        USER.add( U_ID )
+        USER.add(U_ID)
 
     return await message.answer("Пользователи обновлены")
-
-

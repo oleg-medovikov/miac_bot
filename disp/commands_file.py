@@ -1,9 +1,12 @@
 from .dispetcher import dp, bot
 from aiogram import types
-import pandas as pd, os
+import pandas as pd
+import os
 from clas import User, Command
 
+from func import delete_message
 from aiogram.dispatcher.filters import BoundFilter
+
 
 class IsCommandsFile(BoundFilter):
     key = 'is_commands_file'
@@ -14,21 +17,22 @@ class IsCommandsFile(BoundFilter):
     async def check(self, message: types.Message):
 
         USER = User(
-                u_id = message['from']['id'],
-                first_name = message['from']['first_name'],
-                last_name = message['from']['last_name'],
-                username = message['from']['username'],
-                groups = '', fio ='', description = '',
+                u_id=message['from']['id'],
+                first_name=message['from']['first_name'],
+                last_name=message['from']['last_name'],
+                username=message['from']['username'],
+                groups='', fio='', description='',
                 )
         if not message['document']['file_name'] == 'Commands.xlsx':
             return False
         if not USER.admin():
-            await message.delete()
+            await delete_message(message)
             return False
         return True
 
 
 dp.filters_factory.bind(IsCommandsFile)
+
 
 @dp.message_handler(is_commands_file=True, content_types=['document'])
 async def update_commands(message):
@@ -37,24 +41,26 @@ async def update_commands(message):
 
     DESTINATION = 'temp/' + FILE.file_unique_id + '.xlsx'
     await bot.download_file_by_id(
-                file_id = FILE.file_id,
-                destination = DESTINATION
+                file_id=FILE.file_id,
+                destination=DESTINATION
                 )
-    
-    await message.delete()
 
-    COLUMNS = ['c_id','c_category','c_name',
-               'c_procedure','c_arg',
-               'return_file','asc_day']
+    await delete_message(message)
+
+    COLUMNS = [
+        'c_id', 'c_category', 'c_name',
+        'c_procedure', 'c_arg',
+        'return_file', 'asc_day'
+    ]
 
     TYPES = dict(
-            c_id = int,
-            c_category = str,
-            c_name = str,
-            c_procedure = str,
-            c_arg = str,
-            return_file = bool,
-            asc_day = bool
+            c_id=int,
+            c_category=str,
+            c_name=str,
+            c_procedure=str,
+            c_arg=str,
+            return_file=bool,
+            asc_day=bool
             )
 
     try:
@@ -62,23 +68,22 @@ async def update_commands(message):
     except Exception as e:
         os.remove(DESTINATION)
         return await message.answer(str(e))
-    
-   
-    ## Проверки файла на всякое
+
+    # Проверки файла на всякое
     # на наличие пустых ячеек
-    if any(df.loc[df.isnull().to_numpy(),'c_id'] ):
+    if any(df.loc[df.isnull().to_numpy(), 'c_id']):
         MESS = "Есть пустые ячейки! \n" \
-                + str(df.loc[df.isnull().to_numpy(),'c_id'].unique())
+                + str(df.loc[df.isnull().to_numpy(), 'c_id'].unique())
 
         return await message.answer(MESS)
 
     df = df.astype(TYPES)
- 
+
     # на уникальность c_id
     if any(df['c_id'].duplicated()):
         MESS = "Повторяющиеся c_id: \n" \
-                + str(df.loc[df['c_id'].duplicated(), 'c_id' ]) 
-        
+                + str(df.loc[df['c_id'].duplicated(), 'c_id'])
+
         return await message.answer(MESS)
 
     # проверка на False True
@@ -87,10 +92,9 @@ async def update_commands(message):
 
         return await message.answer(MESS)
 
-    # Добавляем команды по одной 
+    # Добавляем команды по одной
     for row in df.to_dict('records'):
         COMMAND = Command(**row)
-        COMMAND.add( U_ID )
+        COMMAND.add(U_ID)
 
     return await message.answer("Команды обновлены")
-
