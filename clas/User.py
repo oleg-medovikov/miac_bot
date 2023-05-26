@@ -3,6 +3,7 @@ from typing import Optional
 
 from conf import MIAC_API_URL, TOKEN
 from base import t_users, BASE
+from sqlalchemy import and_
 import requests
 
 
@@ -14,6 +15,25 @@ class User(BaseModel):
     groups:       str
     fio:          str
     description:  str
+
+    @staticmethod
+    async def get_all() -> list:
+        "выгружаем из базы всех пользователей"
+        query = t_users.select().order_by(t_users.c.u_id)
+        list_ = []
+        for row in await BASE.fetch_all(query):
+            list_.append(User(**row).dict())
+        return list_
+
+    @staticmethod
+    async def check_admin(U_ID: int) -> bool:
+        "проверка на админа"
+        query = t_users.select().where(and_(
+            t_users.c.u_id == int(U_ID),
+            t_users.c.groups == 'admin'
+        ))
+        res = await BASE.fetch_one(query)
+        return False if res is None else True
 
     def add(self, USER_ID):
         "Добавление пользователя в таблицу пользователей"
@@ -72,11 +92,4 @@ class User(BaseModel):
         req = requests.get(URL, headers=HEADERS)
         return req.json()
 
-    @staticmethod
-    async def get_all() -> list:
-        "выгружаем из базы всех пользователей"
-        query = t_users.select().order_by(t_users.c.u_id)
-        list_ = []
-        for row in await BASE.fetch_all(query):
-            list_.append(User(**row).dict())
-        return list_
+

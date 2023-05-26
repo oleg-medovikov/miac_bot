@@ -12,6 +12,5 @@ async def on_startup(dp):
     while True:
         try:
             await dp.start_polling()
-        except Exception as e:
-            print(str(e))
+        except:
             asyncio.sleep(5)

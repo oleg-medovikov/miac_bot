@@ -54,7 +54,7 @@ class Task(BaseModel):
         if not req.json() is None:
             return Task(**req.json())
 
-    async def get_all_tasks():
+    async def get_all():
         """Взять доступную задачу"""
         j = t_tasks.join(
             t_users,
@@ -106,7 +106,7 @@ class Task(BaseModel):
         except:
             pass
         URL = MIAC_API_URL + '/stop_task'
-        req = requests.post(URL, headers=HEADERS, json=BODY)
+        requests.post(URL, headers=HEADERS, json=BODY)
 
     def users(self):
         """Получить список юзеров для рассылки"""

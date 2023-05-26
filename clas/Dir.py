@@ -2,13 +2,15 @@ from pydantic import BaseModel
 
 from conf import MIAC_API_URL, TOKEN
 import requests
+from base import BASE, t_dirs
+
 
 class Dir(BaseModel):
-    d_id        : int
-    d_name      : str
-    directory   : str
-    description : str
-    working     : bool
+    d_id:         int
+    d_name:       str
+    directory:    str
+    description:  str
+    working:      bool
 
 
     def get( NAME ) -> str:
@@ -33,15 +35,7 @@ class Dir(BaseModel):
 
         requests.post(URL, headers=HEADERS, json = BODY)
 
-    def get_all_dirs( USER_ID ):
+    async def get_all():
         "Получить все директории"
-        HEADERS = dict(
-                KEY = TOKEN,
-                UID = str(USER_ID)
-                )
-        URL = MIAC_API_URL + '/get_all_dirs'
-
-        req = requests.get(URL, headers=HEADERS)
-        return req.json()
-
-
+        query = t_dirs.select().order_by(t_dirs.c.d_id)
+        return [dict(row) for row in await BASE.fetch_all(query)]
