@@ -10,12 +10,10 @@ from func import delete_message
 async def ask_log(message: types.Message):
     COUNT = 20
 
-    U_ID = message['from']['id']
-    df = pd.DataFrame(Task.get_all_tasks(U_ID))
+    df = pd.DataFrame(await Task.get_log(COUNT))
 
-    IGNORE = ['Проверить ФР', 'Статус замечаний']
-
-    df = df.loc[~df['c_name'].isin(IGNORE)].head(COUNT)
+    # IGNORE = ['Проверить ФР', 'Статус замечаний']
+    # df = df.loc[~df['c_name'].isin(IGNORE)].head(COUNT)
 
     df['fio'] = df['fio'].str.split(' ', n=0, expand=True)
     df['time_create'] = pd.to_datetime(df['time_create']).dt.strftime('%H:%M')
@@ -38,7 +36,7 @@ async def ask_log(message: types.Message):
                 + str(task['delta']) + ' с.'
         # + task['c_name'][:13] + ' '*(_2 - len(task['c_name']) )  +  ' | ' \
 
-    mess += '```' 
+    mess += '```'
 
     await delete_message(message)
     await message.answer(mess, parse_mode='Markdown')

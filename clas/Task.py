@@ -27,6 +27,28 @@ class Task(BaseModel):
     time_stop:    Optional[datetime]
     comment:      Optional[str]
 
+    @staticmethod
+    async def get_log(COUNT: int):
+        """Взять логи последних задач"""
+        j = t_tasks.join(
+            t_users,
+            t_tasks.c.client == t_users.c.u_id,
+            ).join(
+            t_commands,
+            t_tasks.c.c_id == t_commands.c.c_id,
+            )
+        query = select([
+            t_tasks.c.time_create,
+            t_users.c.fio,
+            t_commands.c.c_name,
+            t_tasks.c.time_start,
+            t_tasks.c.time_stop,
+            ]).order_by(desc(t_tasks.c.time_create))\
+            .select_from(j).limit(COUNT)
+
+        res = await BASE.fetch_all(query)
+        return [dict(r) for r in res]
+
     def add(self):
         """Создание нового задания
             Нужно проверить, есть ли в пуле 
