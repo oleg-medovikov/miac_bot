@@ -1,18 +1,19 @@
-from datetime import date
-from uuid import uuid4, UUID
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 from conf import MIAC_API_URL, TOKEN
-import requests 
+import requests
+
+from base import BASE, t_commands
+
 
 class Command(BaseModel):
-    c_id : int
-    c_category : str
-    c_name : str
-    c_procedure : str
-    c_arg : str
-    return_file : bool
-    asc_day : bool
+    c_id:        int
+    c_category:  str
+    c_name:      str
+    c_procedure: str
+    c_arg:       str
+    return_file: bool
+    asc_day:     bool
 
     def add(self, USER_ID):
         "добавление новой команды"
@@ -21,20 +22,17 @@ class Command(BaseModel):
                 UID=str(USER_ID) )
         BODY = self.__dict__
         URL = MIAC_API_URL + '/add_command'
-        req  = requests.post(URL,headers=HEADERS, json = BODY)
-        
+        req = requests.post(URL,headers=HEADERS, json = BODY)
+
         return req.json()
 
-    def get_all(USER_ID):
+    async def get_all():
         "Получение всех комманд"
-        HEADERS = dict(
-                KEY=TOKEN,
-                UID=str(USER_ID) )
-        URL = MIAC_API_URL + '/all_commands'
-        req  = requests.get(URL,headers=HEADERS)
-        return req.json()
+        query = t_commands.select().order_by(t_commands.c.c_id)
+        return [dict(row) for row in await BASE.fetch_all(query)]
 
-    def get( C_ID ):
+
+    def get(C_ID):
         "Получение команды по айдишнику"
         HEADERS = dict(
                 KEY=TOKEN,
@@ -45,4 +43,3 @@ class Command(BaseModel):
         
         if not req.json() is None:
             return Command(**req.json())
-

@@ -50,9 +50,8 @@ class Task(BaseModel):
                 )
         URL = MIAC_API_URL + '/get_task'
         req = requests.get(URL, headers=HEADERS)
-        
+
         if not req.json() is None:
-            #print(req.json() )
             return Task(**req.json())
 
     async def get_all_tasks():
@@ -117,9 +116,8 @@ class Task(BaseModel):
         BODY = self.__dict__
         BODY['t_id'] = BODY['t_id'].hex
         BODY['time_create'] = BODY['time_create'].isoformat()
-        #BODY['time_start']  = BODY['time_start'].isoformat()
-        
+        # BODY['time_start']  = BODY['time_start'].isoformat()
         URL = MIAC_API_URL + '/get_task_users_list'
         req = requests.get(URL, headers=HEADERS, json=BODY)
-        
+
         return req.json()

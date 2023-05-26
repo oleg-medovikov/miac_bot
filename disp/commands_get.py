@@ -10,8 +10,8 @@ import os
 
 @dp.message_handler(is_admin=True, commands=['commands'])
 async def get_commands(message: types.Message):
-    U_ID = message['from']['id']
-    df = pd.DataFrame(data=Command.get_all(U_ID))
+    JSON = await Command.get_all()
+    df = pd.DataFrame(data=JSON)
 
     FILENAME = 'temp/Commands.xlsx'
     SHETNAME = 'commands'
