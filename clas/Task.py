@@ -1,10 +1,12 @@
 from pydantic import BaseModel, Field
 from typing import Optional
-from datetime import datetime
+from datetime import datetime, timedelta
 from uuid import uuid4, UUID
 
 from conf import MIAC_API_URL, TOKEN
-from base import t_tasks, BASE
+from base import t_tasks, t_users, t_commands, BASE
+from sqlalchemy import select, desc
+
 import requests
 
 
@@ -55,11 +57,31 @@ class Task(BaseModel):
 
     async def get_all_tasks():
         """Взять доступную задачу"""
-        query = t_tasks.select().order_by(t_tasks.c.time_create)
-        list_ = []
-        for row in await BASE.fetch_all(query):
-            list_.append(Task(**row).dict())
-        return list_
+        j = t_tasks.join(
+            t_users,
+            t_tasks.c.client == t_users.c.u_id,
+            ).join(
+            t_commands,
+            t_tasks.c.c_id == t_commands.c.c_id,
+            )
+        query = select([
+            t_tasks.c.time_create,
+            t_users.c.fio,
+            t_tasks.c.task_type,
+            t_commands.c.c_name,
+            t_tasks.c.c_arg,
+            t_tasks.c.users_list,
+            t_tasks.c.time_start,
+            t_tasks.c.time_stop,
+            t_tasks.c.comment,
+            ]).order_by(desc(t_tasks.c.time_create)).select_from(j).where(
+                t_tasks.c.time_create.between(
+                    datetime.now() - timedelta(days=100),
+                    datetime.now(),
+                    ))
+
+        res = await BASE.fetch_all(query)
+        return [dict(r) for r in res]
 
     def restart():
         """Рестартануть выполнение задач, если бот перезапустился"""
@@ -101,4 +123,3 @@ class Task(BaseModel):
         req = requests.get(URL, headers=HEADERS, json=BODY)
         
         return req.json()
-
