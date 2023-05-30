@@ -9,6 +9,7 @@ from func import delete_message
 @dp.message_handler(is_ask_log=True, content_types=['text'])
 async def ask_log(message: types.Message):
     COUNT = 20
+    await delete_message(message)
 
     df = pd.DataFrame(await Task.get_log(COUNT))
 
@@ -38,5 +39,4 @@ async def ask_log(message: types.Message):
 
     mess += '```'
 
-    await delete_message(message)
     await message.answer(mess, parse_mode='Markdown')
